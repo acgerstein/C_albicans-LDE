@@ -1,3 +1,5 @@
+library(viridis)
+
 #All disk assay and flow data
 se <- function(x, na.rm=TRUE) sqrt(var(x, na.rm=TRUE)/(length(x) - 1))
 source("scripts/02_MIC-data.R")
@@ -5,17 +7,24 @@ source("scripts/03_flow-data.R")
 
 #load in ancestral strain information
 lines <- read.csv("data_in/general/LDE-strainTable.csv")
+lines$init_mic <- c(4, 1, 0.0125, 0.5, 4, 1, 1, 0.5, 0.0125, 0.0125, 0.0125, 32, 0.0125, 0.0125, 0.0125, 0.0125, 0.0125, 4, 0.0125, 4)
 
 #Showsthe experiments where data was collected (table S3)
 BMDtab.0 <- data.frame(exper=1:6, "YPD" = rep("x",6), "0.5" = c("", "", "x", "", "", ""), "1" =c("x", "x", "x", "x", "", ""), "4" = c("", "", "x", "x", "", ""), "8" = c("x", "", "", "x", "x", ""), "32" = c("x", "", "", "x", "x", "x"), "128" = c("", "x", "", "", "x", "x"), "512" = c("", "", "", "", "", "x"))
 
 BMDtab.10 <- data.frame(exper=c(1, 3, 4, 5), "YPD" = rep("x",4), "0.5" = c("", "x", "", ""), "1" =c("x", "x", "", ""), "4" = c("",  "x", "", ""), "8" = c("x","", "x", ""), "32" = c("x", "", "x", "x"), "128" = c( "", "", "x", "x"), "512" = c("", "", "", "x"))
 
+#colours based on initial MIC
 #colours
-colfunc <- colorRampPalette(c("red", "purple", "blue"))
-colours <- c(colfunc(20))
-colours <- rev(c("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77AADD", "#117777", "#44AAAA", "#77CCCC", "#117744", "#44AA77", "#88CCAA", "#777711", "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77", "#771122", "#AA4455"))
+coloursM <- magma(5, direction=-1)
+coloursV <- viridis(5, direction=-1)
+lines$colours[lines$init_mic == 0.0125] <- coloursM[2]
+lines$colours[lines$init_mic == 0.5] <- coloursV[2]
+lines$colours[lines$init_mic == 1] <- coloursV[4]
+lines$colours[lines$init_mic == 4] <- coloursM[3]
+lines$colours[lines$init_mic == 32] <- coloursV[5]
 
+plot(lines$strain, log(lines$init_mic), col=lines$colours, pch=21, cex=2)
 #################################################
 #order the strains based first on fitness in 1ug FLC
 #################################################
@@ -55,7 +64,7 @@ newdf3$col <- "#999999"
 for(i in 1:20){
   sub <- subset(all10.1, line==i)
   sub$place <- which(place==i)
-  sub$col <- colours[which(place==i)]
+  sub$col <- rep(subset(lines, strain == i)$colours, 12)
   newdf3 <- bind_rows(newdf3, sub)
 }
 all10.1 <- newdf3[-1,]
@@ -76,7 +85,7 @@ newdf$col <- "#000000"
 for(i in 1:20){
   sub <- subset(MICall, line==i)
   sub$place <- which(place==i)
-  sub$col <- colours[which(place==i)]
+  sub$col <- rep(subset(lines, strain == i)$colours, 12)
   newdf <- rbind(newdf, sub)
 }
 MICall <- newdf[-1,]
