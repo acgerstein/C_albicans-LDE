@@ -77,16 +77,21 @@ newdf3$place <- 0
 newdf3$place72 <- 0
 newdf3$col <- "#999999"
 newdf3$col72 <- "#999999"
+newdf3$cola <- "#999999"
+newdf3$col72a <- "#999999"
 for(i in 1:20){
   sub <- subset(all10.1, line==i)
   sub$place <- which(place==i)
   sub$place72 <- which(place72==i)
   #sub$col <- rep(subset(lines, strain == i)$colours, 12)
 #  sub$col <- colours20[which(place==i)]
-  sub$col <- coloursVa[which(place==i)]
-  sub$col72 <- coloursVa[which(place72==i)]
+  sub$cola <- coloursVa[which(place==i)]
+  sub$col72a <- coloursVa[which(place72==i)]
+  sub$col <- coloursV[which(place==i)]
+  sub$col72 <- coloursV[which(place72==i)]
   newdf3 <- bind_rows(newdf3, sub)
 }
+
 all10.1 <- newdf3[-1,]
 all0.1 <- cbind(all0.1, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
 all10.1.72 <-  cbind(all10.1.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
@@ -104,6 +109,8 @@ newdf$place <- 0
 newdf$place72 <- 0
 newdf$col <- "#000000"
 newdf$col72 <- "#000000"
+newdf$cola <- "#000000"
+newdf$col72a <- "#000000"
 
 for(i in 1:20){
   sub <- subset(MICall, line==i)
@@ -111,8 +118,10 @@ for(i in 1:20){
   sub$place72 <- which(place72==i)
   #sub$col <- rep(subset(lines, strain == i)$colours, 12)
   #sub$col <- colours20[which(place==i)]
-  sub$col <- coloursVa[which(place==i)]
-  sub$col72 <- coloursVa[which(place72==i)]
+  sub$cola <- coloursVa[which(place==i)]
+  sub$col72a <- coloursVa[which(place72==i)]
+  sub$col <- coloursV[which(place==i)]
+  sub$col72 <- coloursV[which(place72==i)]
   newdf <- rbind(newdf, sub)
 }
 MICall <- newdf[-1,]
@@ -155,6 +164,11 @@ flow.ag$t10b.G1.1 <- flow.ag$t10b.G1.1*cor10b
 #can not find the clade of FH1 to save my life so put in a dummy clade for now
 #can not add disk assay data here because there is missing data
 ############################################################################
+names(all0.1)[4:6] <- c("all0.1", "all0.1.sd", "all0.1.se")
+names(all0.1.72)[4:6] <- c("all0.1.72", "all0.1.72.sd", "all0.1.72.se")
+names(all10.1)[4:6] <- c("all10.1", "all10.1.sd", "all10.1.se")
+names(all10.1.72)[4:6] <- c("all10.1.72", "all10.1.72.sd", "all10.1.72.se")
+
 fitFlow <- data.frame(strain = rep(lines$strain, each=12), clade = rep(lines$clade, each=12), MTL = rep(lines$MTL, each=12), zygosity = rep(lines$zygosity, each=12), all0.1, all0.1.72[,4:6], all10.1[, 4:6], all10.1.72[,4:6], "t0.G1.1" = flow$t0.G1.mu,"t10.G1.1" =  flow$t10.G1.1*cor10, "t10.G1.2" = flow$t10.G1.2*cor10, "t10.G1.3" = flow$t10.G1.3*cor10,  MICall[, c(2:25)])
 
 fitFlow.ddn <- split(fitFlow, fitFlow$strain)
@@ -174,10 +188,7 @@ SMG72.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TR
 SMG72.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TRUE)[2]))
 
 
-names(fitFlow)[15:17] <- c("all0.ag.1", "all0.sd.1", "all0.se.1")
-names(fitFlow)[18:20] <- c("all0.ag.1.72", "all0.sd.1.72", "all0.se.1.72")
-names(fitFlow)[21:23] <- c("all10.ag.1", "all10.sd.1", "all10.se.1")
-names(fitFlow)[24:26] <- c("all10.ag.1.72", "all10.sd.1.72", "all10.se.1.72")
+
 fitFlow$lr <- paste(fitFlow$line, fitFlow$rep, sep=".")
 fitFlow$pch <- ifelse(is.na(fitFlow$t10.G1.2), 21, 24)
 fitFlow$clade <- as.factor(fitFlow$clade)
@@ -229,8 +240,8 @@ fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("line", "clade", "zygosity", 
 #fitFlow.ag$cv.t10.G1.1 <- flow.ag.cv$t10.G1.1
 fitFlow.ag$change24adj <- sign(fitFlow.ag$change24)*log(abs(fitFlow.ag$change24)+1)
 fitFlow.ag$change72adj <- sign(fitFlow.ag$change72)*log(abs(fitFlow.ag$change72)+1)
-fitFlow.ag$change24ave <- fitFlow.ag$all10.ag.1 - fitFlow.ag$all0.ag.1
-fitFlow.ag$change72ave <- fitFlow.ag$all10.ag.1.72 - fitFlow.ag$all0.ag.1.72
+fitFlow.ag$change24ave <- fitFlow.ag$all10.1 - fitFlow.ag$all0.1
+fitFlow.ag$change72ave <- fitFlow.ag$all10.1.72 - fitFlow.ag$all0.1.72
 fitFlow.ag$SMG24.up <- SMG24.up
 fitFlow.ag$SMG24.down <- SMG24.down
 fitFlow.ag$SMG48.up <- SMG48.up
