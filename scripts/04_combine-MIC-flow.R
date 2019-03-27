@@ -151,7 +151,7 @@ cor10b <- mu0/mu10b
 
 flow.ag <- aggregate(flow[c("t0.G1.mu", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], median, na.rm=TRUE)
 flow.ag.sd <- aggregate(flow[c("t0.G1.mu", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], sd, na.rm=TRUE)
-#flow.ag.cv <- aggregate(flow[c("t0.G1.mu", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], cv)
+flow.ag.cv <- aggregate(flow[c("t0.G1.mu", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], cv)
 
 flow.ag$t3.G1.1 <- flow.ag$t3.G1.1*cor3
 flow.ag$t5.G1.1 <- flow.ag$t5.G1.1*cor5
@@ -168,6 +168,10 @@ names(all0.1)[4:6] <- c("all0.1", "all0.1.sd", "all0.1.se")
 names(all0.1.72)[4:6] <- c("all0.1.72", "all0.1.72.sd", "all0.1.72.se")
 names(all10.1)[4:6] <- c("all10.1", "all10.1.sd", "all10.1.se")
 names(all10.1.72)[4:6] <- c("all10.1.72", "all10.1.72.sd", "all10.1.72.se")
+names(all0.0)[4:6] <- c("all0.0", "all0.0.sd", "all0.10.se")
+names(all0.0.72)[4:6] <- c("all0.0.72", "all0.0.72.sd", "all0.0.72.se")
+names(all10.0)[4:6] <- c("all10.0", "all10.0.sd", "all10.0.se")
+names(all10.0.72)[4:6] <- c("all10.0.72", "all10.0.72.sd", "all10.0.72.se")
 
 fitFlow <- data.frame(strain = rep(lines$strain, each=12), clade = rep(lines$clade, each=12), MTL = rep(lines$MTL, each=12), zygosity = rep(lines$zygosity, each=12), all0.1, all0.1.72[,4:6], all10.1[, 4:6], all10.1.72[,4:6], "t0.G1.1" = flow$t0.G1.mu,"t10.G1.1" =  flow$t10.G1.1*cor10, "t10.G1.2" = flow$t10.G1.2*cor10, "t10.G1.3" = flow$t10.G1.3*cor10,  MICall[, c(2:25)])
 
@@ -192,8 +196,8 @@ SMG72.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TRUE
 fitFlow$lr <- paste(fitFlow$line, fitFlow$rep, sep=".")
 fitFlow$pch <- ifelse(is.na(fitFlow$t10.G1.2), 21, 24)
 fitFlow$clade <- as.factor(fitFlow$clade)
-fitFlow$delta1.24 <- fitFlow$all10.ag.1-fitFlow$all0.ag.1
-fitFlow$delta1.72 <- fitFlow$all10.ag.1.72-fitFlow$all0.ag.1.72
+fitFlow$delta1.24 <- fitFlow$all10.1-fitFlow$all0.1
+fitFlow$delta1.72 <- fitFlow$all10.1.72-fitFlow$all0.1.72
 fitFlow$MIC24 <- rep(MICall.ag$MIC24, each=12) #this changes t0 to the median
 fitFlow$MIC48 <- rep(MICall.ag$MIC48, each=12) #this changes t0 to the median
 fitFlow$MIC72 <- rep(MICall.ag$MIC72, each=12) #this changes t0 to the median
@@ -226,18 +230,18 @@ fitFlow.variable <- subset(fitFlow, line %in%  c(2:4, 6:11, 13:17, 19, 20))
 #use.wells <- c("all0.ag.1", "all0.ag.1.72",  "all10.ag.1", "all10.ag.1.72", 22, 23, 26:49, 52:65)
 #change the meta-analysis information to character
 fitFlow$strain <- as.character(fitFlow$strain)
-fitFlow$strain <- as.character(fitFlow$line)
-fitFlow$strain <- as.character(fitFlow$rep)
-fitFlow$strain <- as.character(fitFlow$enviro)
-fitFlow$strain <- as.character(fitFlow$place)
+fitFlow$line <- as.character(fitFlow$line)
+fitFlow$rep <- as.character(fitFlow$rep)
+fitFlow$enviro <- as.character(fitFlow$enviro)
+fitFlow$place <- as.character(fitFlow$place)
 
 nums <- unlist(lapply(fitFlow, is.numeric))
 
 #aggregates
 #fitFlow.ag <- aggregate(fitFlow[, use.wells], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
-fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("line", "clade", "zygosity", "col", "col72")], mean, na.rm=TRUE)
+fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
 
-#fitFlow.ag$cv.t10.G1.1 <- flow.ag.cv$t10.G1.1
+fitFlow.ag$cv.t10.G1.1 <- flow.ag.cv$t10.G1.1
 fitFlow.ag$change24adj <- sign(fitFlow.ag$change24)*log(abs(fitFlow.ag$change24)+1)
 fitFlow.ag$change72adj <- sign(fitFlow.ag$change72)*log(abs(fitFlow.ag$change72)+1)
 fitFlow.ag$change24ave <- fitFlow.ag$all10.1 - fitFlow.ag$all0.1
@@ -254,7 +258,7 @@ fitFlow.ag$SMG48.up.3 <- SMG48.up.3
 fitFlow.ag$SMG48.down.3 <- SMG48.down.3
 fitFlow.ag$SMG72.up.3 <- SMG72.up.3
 fitFlow.ag$SMG72.down.3 <- SMG72.down.3
-
+fitFlow.ag <- fitFlow.ag[order(fitFlow.ag$line), ]
 fitFlow.sd <- aggregate(fitFlow[, nums], fitFlow[c("line", "clade", "zygosity", "col")], sd, na.rm=TRUE)
 
 fitFlow.ag.variable <- subset(fitFlow.ag, line %in% c(2:4, 6:11, 13:17, 19, 20))

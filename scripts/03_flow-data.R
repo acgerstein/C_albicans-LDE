@@ -1,3 +1,5 @@
+cv <-function(x, ...) sd(x,na.rm=TRUE)/mean(x,na.rm=TRUE)
+
 #ANC & LDE
 flow <- read.csv("data_in/flow/MA4_flow.csv", sep=",", as.is=TRUE)
 names(flow)[1] <- "name"
@@ -16,4 +18,4 @@ flow$line <- as.numeric(substring(flow$line, 2, 3))
 
 flow.ag <- aggregate(flow[c("t0.G1.1", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], median, na.rm=TRUE)
 flow.ag.sd <- aggregate(flow[c("t0.G1.1", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], sd, na.rm=TRUE)
-
+flow.ag.cv <- aggregate(flow[c("t0.G1.1", "t3.G1.1", "t5.G1.1", "t8.G1.1", "t10.G1.1", "t10b.G1.1")], flow["line"], cv, na.rm=TRUE)
