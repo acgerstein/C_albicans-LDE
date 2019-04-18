@@ -258,9 +258,9 @@ fitFlow.ag$SMG48.up.3 <- SMG48.up.3
 fitFlow.ag$SMG48.down.3 <- SMG48.down.3
 fitFlow.ag$SMG72.up.3 <- SMG72.up.3
 fitFlow.ag$SMG72.down.3 <- SMG72.down.3
-fitFlow.ag <- fitFlow.ag[order(fitFlow.ag$line), ]
+fitFlow.ag <- fitFlow.ag[order(as.numeric(fitFlow.ag$line)), ]
 fitFlow.sd <- aggregate(fitFlow[, nums], fitFlow[c("line", "clade", "zygosity", "col")], sd, na.rm=TRUE)
-
+fitFlow.sd <- fitFlow.sd[order(as.numeric(fitFlow.sd$line)), ]
 fitFlow.ag.variable <- subset(fitFlow.ag, line %in% c(2:4, 6:11, 13:17, 19, 20))
 fitFlow.sd.variable <- subset(fitFlow.sd, line %in% c(2:4, 6:11, 13:17, 19, 20))
 
@@ -293,3 +293,4 @@ fitFlow.plot.ag$MIC72[fitFlow.plot.ag$MIC72<1] <- 0.25
 fitFlow.plot.ag$MIC72.10[fitFlow.plot.ag$MIC72.10<1] <- 0.25
 fitFlow.plot.ag$MIC72[fitFlow.plot.ag$MIC72>128] <- 256
 fitFlow.plot.ag$MIC72.10[fitFlow.plot.ag$MIC72.10>128] <- 256
+fitFlow.plot.ag <- fitFlow.plot.ag[order(as.numeric(fitFlow.plot.ag$line)), ]

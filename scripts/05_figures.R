@@ -23,7 +23,7 @@ source("data_in/general/mvee.R")
 #################################
 source("scripts/04_combine-MIC-flow.R")
 
-sub <- data.frame(place = as.factor(all10.1$place), data= all10.1$data, col =all10.1$col)
+sub <- data.frame(place = as.factor(all10.1$place), data= all10.1$all10.1, col =all10.1$col)
 #################################
 #Fitness in FLC1
 #################################
@@ -73,26 +73,26 @@ dev.off()
 system("open manuscript/figures/Figure1-OD1.pdf")
 
 #Figure 2
-pdf("manuscript/figures/Figure2-OD1cor-mean_SD.pdf", width=8, height=6)
+pdf("manuscript/figures/Figure2-OD1cor-mean_SD.pdf", width=7, height=6)
 par(mfrow=c(2, 2),mar=c(1,1 , 1, 1), oma=c(3, 4, 1, 1))
-plot(fitFlow.ag$all0.1, fitFlow.ag$change24ave, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1))
+plot(fitFlow.ag$all0.1, fitFlow.ag$change24ave, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1), cex=1.5)
 axis(1, labels=FALSE)
 axis(2, las=2)
 mtext("Assessed at 24h", side=3, adj=0.01)
 abline(lm(fitFlow.ag$change24ave~fitFlow.ag$all0.1))
-text(-0.1, -0.18, "cor = -0.58", pos=4)
+text(-0.1, -0.18, "cor = -0.58", pos=4, cex=1.25)
 txt <- expression(paste(Delta," mean growth improvement"))
 mtext(txt, side=2, outer=FALSE, line=2.5)
 
 par(mar=c(1,1 , 1, 1))
-plot(fitFlow.ag$all0.1.72, fitFlow.ag$all10.1.72-fitFlow.ag$all0.1.72, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1))
+plot(fitFlow.ag$all0.1.72, fitFlow.ag$all10.1.72-fitFlow.ag$all0.1.72, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1), cex=1.5)
 axis(1, labels=FALSE)
 axis(2, labels=FALSE)
 mtext("Assessed at 72h", side=3, adj=0.01)
 abline(lm(fitFlow.ag$change72ave~fitFlow.ag$all0.1.72))
-text(-0.1, -0.18, "cor = -0.94", pos=4)
+text(-0.1, -0.18, "cor = -0.94", pos=4, cex=1.25)
 
-plot(fitFlow.ag$all0.1, fitFlow.sd$all10.1-fitFlow.sd$all0.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.1, 0.45))
+plot(fitFlow.ag$all0.1, fitFlow.sd$all10.1-fitFlow.sd$all0.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.1, 0.45), cex=1.5)
 axis(1, labels=FALSE)
 axis(2, las=2)
 abline(lm(c(fitFlow.sd$all10.1-fitFlow.sd$all0.1)~fitFlow.ag$all0.1))
@@ -100,28 +100,28 @@ axis(2, las=2)
 axis(1)
 txt <- expression(paste(Delta," replicate variation"))
 mtext(txt, side=2, outer=FALSE, line=2.5)
-text(-0.1, -0.08, "cor = -0.77", pos=4)
+text(-0.1, -0.08, "cor = -0.77", pos=4, cex=1.25)
 
-plot(fitFlow.ag$all0.1.72, fitFlow.sd$all10.1.72-fitFlow.sd$all0.1.72, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.1, 0.45))
+plot(fitFlow.ag$all0.1.72, fitFlow.sd$all10.1.72-fitFlow.sd$all0.1.72, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.1, 0.45), cex=1.5)
 axis(1)
 axis(2, labels=FALSE)
 abline(lm(c(fitFlow.sd$all10.1-fitFlow.sd$all0.1)~fitFlow.ag$all0.1))
-text(-0.1, -0.08, "cor = -0.47", pos=4)
+text(-0.1, -0.08, "cor = -0.47", pos=4, cex=1.25)
 mtext("Initial growth ability", side=1, outer=TRUE, line=1.5)
 
 
-xl <- 1
-yb <- 1
-xr <- 1.5
-yt <- 2
-
-par(mar=c(8,18.5,2.5,0.5))
-par(new=TRUE)
-plot(NA,type="n",ann=FALSE,xlim=c(1,2),ylim=c(1,2),xaxt="n",yaxt="n",bty="n")
-rect(xl, head(seq(yb,yt,(yt-yb)/20),-1), xr, tail(seq(yb,yt,(yt-yb)/20),-1), col=coloursV, border=NA)
-
-mtext(expression("low anc.\n fitness"),side=1,cex=0.6, adj=-1, line=0.25)
-mtext(expression("high anc.\n fitness"),side=3,cex=0.6, adj=-2, line=-0.25)
+# xl <- 1
+# yb <- 1
+# xr <- 1.5
+# yt <- 2
+#
+# par(mar=c(8,12.5,0.5,0.5))
+# par(new=TRUE)
+# plot(NA,type="n",ann=FALSE,xlim=c(1,2),ylim=c(1,2),xaxt="n",yaxt="n",bty="n")
+# rect(xl, head(seq(yb,yt,(yt-yb)/20),-1), xr, tail(seq(yb,yt,(yt-yb)/20),-1), col=coloursV, border=NA)
+#
+# mtext(expression("low anc.\n fitness"),side=1,cex=0.6, adj=-1, line=0.25)
+# mtext(expression("high anc.\n fitness"),side=3,cex=0.6, adj=-2, line=-0.25)
 
 dev.off()
 
@@ -129,7 +129,8 @@ system("open manuscript/figures/Figure2-OD1cor-mean_SD.pdf")
 
 
 #################################
-#Fitness in YPD
+# Fitness in YPD
+# Figure 3
 #################################
 #dashes
 pdf("manuscript/figures/Figure3-YPD.pdf", width=7, height=5.5)
@@ -206,19 +207,82 @@ dev.off()
 
 ####################
 #resistance
+# Figure 4
 ####################
-pdf("manuscript/figures/Figure4-BMD_resist.pdf", width=7, height=4.5)
-plot(1:20, log(fitFlow.plot.ag$MIC24)[place72], ylim=c(log(0.125), log(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3))
-points(jitter(fitFlow.plot$place), log(fitFlow.plot$MIC24.10), pch=21, col=fitFlow.plot$col)
+
+MIC24.ag.less1 <- subset(fitFlow.plot.ag, MIC24 < 1)
+MIC24.ag.less1 <- MIC24.ag.less1[order(MIC24.ag.less1$place72),]
+MIC24.ag.1 <- subset(fitFlow.plot.ag, MIC24 == 1)
+MIC24.ag.1 <- MIC24.ag.1[order(MIC24.ag.1$place72),]
+MIC24.ag.more1 <- subset(fitFlow.plot.ag, MIC24 > 1)
+MIC24.ag.more1 <- MIC24.ag.more1[order(MIC24.ag.more1$MIC24),]
+
+MIC24.less1 <- subset(fitFlow.plot, line %in% MIC24.ag.less1$line)
+MIC24.less1 <- MIC24.less1[order(MIC24.less1$place72),]
+MIC24.1 <- subset(fitFlow.plot, line %in% MIC24.ag.1$line)
+MIC24.1 <- MIC24.1[order(MIC24.1$place72),]
+MIC24.more1 <- subset(fitFlow.plot, line %in% MIC24.ag.more1$line)
+MIC24.more1 <- MIC24.more1[order(MIC24.more1$MIC24),]
+
+order72_MIC <- c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)
+
+fitFlow.plot$tabMIC10[fitFlow.plot$MIC24.10 < 1] <- "<1"
+fitFlow.plot$tabMIC10[fitFlow.plot$MIC24.10 == 1] <- "=1"
+fitFlow.plot$tabMIC10[fitFlow.plot$MIC24.10 > 1] <- ">1"
+
+fitFlow.tab <- data.frame(table(as.numeric(fitFlow.plot$line), fitFlow.plot$tabMIC10))
+names(fitFlow.tab) <- c("line", "MIC24.10", "Freq")
+
+fitFlow.tab.wide <- as_tibble(fitFlow.tab) %>%
+  spread(MIC24.10, Freq)
+fitFlow.tab.wide.flip <- t(fitFlow.tab.wide)
+fitFlow.tab.wide.flip[2,] <- as.numeric(fitFlow.tab.wide.flip[2,])
+
+pdf("manuscript/figures/Figure4-BMD_resist-bar.pdf", width=8.5, height=4.5)
+par(xpd=NA, oma=c(1, 1, 1, 8))
+m <- barplot(as.matrix(fitFlow.tab.wide.flip[2:4,as.numeric(order72_MIC)]), beside=FALSE, xaxt="n", yaxt="n", col=c("darkgrey", "purple", "orange"),  border=NA, space=c(rep(0.2, 11), 1.5, rep(0.2, 3), 1.5, rep(0.2, 5)), xlim=c(0.7, 26.1))
+axis(1, m[1:20][seq(1, 20, 2)], labels=FALSE)
+text(m[1:20][seq(1, 20, 2)], -1, paste0("A", order72_MIC[seq(1, 20, 2)]), cex=0.6)
+axis(1, m[1:20][seq(2, 21, 2)], labels = FALSE)
+text(m[1:20][seq(2, 21, 2)], -1, paste0("A", order72_MIC[seq(2, 21, 2)]), cex=0.6)
+axis(2, las=2)
+box()
+legend(29, 12, legend=c(expression(MIC[50] ~ "< 1", MIC[50] ~ "= 1", MIC[50] ~ "> 1" )), inset=0.05, pch=22, col=c("darkgrey", "purple", "orange"), pt.bg =c("darkgrey", "purple", "orange"), cex=0.7)
+mtext("number of evolved replicates", side=2, line=2)
+mtext(expression("Ancestral \n" ~ MIC[50] ~ "< 1"), side= 1, adj = 0.2, line = 3, cex= 0.9)
+mtext(expression("Ancestral \n" ~ MIC[50] ~ "= 1"), side= 1, adj = 0.65, line = 3, cex= 0.9)
+mtext(expression("Ancestral \n" ~ MIC[50] ~ "\n> 1"), side= 1, adj = 1, line=3, cex= 0.9)
+dev.off()
+
+pdf("manuscript/figures/Figure4-BMD_resist.pdf", width=7.5, height=4.5)
+plot(1:11, log(MIC24.ag.less1$MIC24), ylim=c(log(0.125), log(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3), xlim=c(1, 20))
+points(12:15, log(MIC24.ag.1$MIC24), pch="-", cex=2.25, col=grey(0.3))
+points(16:20, log(MIC24.ag.more1$MIC24), pch="-", cex=2.25, col=grey(0.3))
+points(jitter(rep(1:11, each=12)), log(MIC24.less1$MIC24.10), pch=21, col=MIC24.less1$col72)
+abline(v=11.5, lty=2)
+points(jitter(rep(12:15, each=12)), log(MIC24.1$MIC24.10), pch=21, col=MIC24.1$col72)
+abline(v=15.5, lty=2)
+points(jitter(rep(16:20, each=12)), log(MIC24.more1$MIC24.10), pch=21, col=MIC24.more1$col72)
 axis(2, at=c(log(0.25),log(1), log(4), log(16), log(64), log(256)), labels=c("<1", "1", "4", "16", "64", ">128"), las=2)
-axis(1, 1:20, labels=FALSE, cex.axis=0.5)
-abline(h=log(8), lty=2)
+#abline(h=log(8), lty=2)
 mtext(expression(MIC[50]), side=2, line=2)
-axis(1, 1:20, labels=FALSE)
-axis(1, seq(1, 20, 2), paste0("A", all0.ag.1$line[place72][seq(1, 20, 2)]), cex.axis=0.8)
-axis(1, seq(2, 20, 2), paste0("A", all0.ag.1$line[place72][seq(2, 20, 2)]), cex.axis=0.8)
+axis(1, 1:20, labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
+axis(1, c(2, 6,8, 10, 12, 15, 18, 20) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 6,8, 10, 12, 15, 18, 20)])),  cex.axis=0.8)
 #text(1:20, -3, paste0("A", fitFlow.plot.ag$line[place]), srt=-45, adj=0.1, xpd=NA)
 dev.off()
+
+# pdf("manuscript/figures/Figure4-BMD_resist.pdf", width=7, height=4.5)
+# plot(1:20, log(fitFlow.plot.ag$MIC24)[place72], ylim=c(log(0.125), log(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3))
+# points(jitter(as.numeric(fitFlow.plot$place)), log(fitFlow.plot$MIC24.10), pch=21, col=fitFlow.plot$col)
+# axis(2, at=c(log(0.25),log(1), log(4), log(16), log(64), log(256)), labels=c("<1", "1", "4", "16", "64", ">128"), las=2)
+# axis(1, 1:20, labels=FALSE, cex.axis=0.5)
+# abline(h=log(8), lty=2)
+# mtext(expression(MIC[50]), side=2, line=2)
+# axis(1, 1:20, labels=FALSE)
+# axis(1, seq(1, 20, 2), paste0("A", all0.ag.1$line[place72][seq(1, 20, 2)]), cex.axis=0.8)
+# axis(1, seq(2, 20, 2), paste0("A", all0.ag.1$line[place72][seq(2, 20, 2)]), cex.axis=0.8)
+# #text(1:20, -3, paste0("A", fitFlow.plot.ag$line[place]), srt=-45, adj=0.1, xpd=NA)
+# dev.off()
 #system("open /Users/acgerstein/Documents/Postdoc/Papers/MutAccum/Figures/Figure4-BMD_resist.pdf")
 
 #################################
@@ -263,6 +327,7 @@ order <- c(13, 17, 11, 3, 15, 9, 14, 4, 16, 19, 10, 8, 20, 7, 2, 6, 12, 5, 1, 18
 #ordered by ancestral SMG - Figure 5
 #SMGorder <- order(fitFlow.ag$all0.1.72)
 pdf("manuscript/figures/Figure5-SMG72-above1ug.pdf", width=6, height=6)
+layout(matrix(1:2,nrow=1),widths=c(0.8,0.1))
 plot(subset(fitFlow, strain==17)$SMG72.10.3, rep(1, 12), ylim=c(0.5, 20.5), xlim=c(0, 1.8), yaxt="n", ylab="", xlab="", col=coloursVa[1], cex=1.2, pch=19)
 #points(median(subset(fitFlow, strain==2)$SMG72.10.2, na.rm=TRUE), 1, pch="l", col=as.character(subset(fitFlow, strain==2)$col), cex=1.4)
 points(fitFlow.ag$SMG72.up.3[17], 1, pch="|", col="black")
@@ -270,7 +335,7 @@ points(fitFlow.ag$SMG72.down.3[17], 1,  pch="|",  col="black")
 arrows(fitFlow.ag$SMG72.down.3[17], 1, fitFlow.ag$SMG72.up.3[17], 1, length=0, col="black")
 #points(fitFlow.ag$SMG72.2[2], 1, pch="|", col="black", cex=1.1)
 k <- 1
-for(i in place72[2:20]){
+for(i in as.numeric(order72_MIC)[2:20]){
   k <- k+1
   points(subset(fitFlow, strain==i)$SMG72.10.3, rep(k, 12), col=coloursVa[k], cex=1.2, pch=19)
   points(fitFlow.ag$SMG72.up.3[i], k, pch="|", col="black")
@@ -278,9 +343,29 @@ for(i in place72[2:20]){
   #points(fitFlow.ag$SMG72.2[i], k, pch="|", col="black", cex=1.1)
   arrows(fitFlow.ag$SMG72.down.3[i], k, fitFlow.ag$SMG72.up.3[i], k, length=0, col="black")
 }
-axis(2, labels=paste0("A", place72), at=1:20, las=2)
-mtext("SMG (72h)", side=1, line=2)
+axis(2, labels=paste0("A", order72_MIC), at=1:20, las=2)
+mtext("Tolerance (72h)", side=1, line=2)
+
+xl <- 1
+yb <- 1
+xr <- 1.5
+yt <- 2
+
+par(mar=c(10,0,15,0))
+plot(NA,type="n",ann=FALSE,xlim=c(1,2),ylim=c(1,2),xaxt="n",yaxt="n",bty="n")
+rect(
+  xl,
+  head(seq(yb,yt,(yt-yb)/20),-1),
+  xr,
+  tail(seq(yb,yt,(yt-yb)/20),-1),
+  col=coloursV, border=NA
+)
+
+mtext(expression("low anc.\n fitness"),side=1,cex=0.6, adj=0, line=0.25)
+mtext(expression("high anc.\n fitness"),side=3,cex=0.6, adj=0, line=-0.25)
+
 dev.off()
+system("open manuscript/figures/Figure5-SMG72-above1ug.pdf")
 
 ################
 #Ploidy
