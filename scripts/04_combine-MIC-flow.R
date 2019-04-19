@@ -93,12 +93,12 @@ for(i in 1:20){
 }
 
 all10.1 <- newdf3[-1,]
-all0.1 <- cbind(all0.1, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
-all10.1.72 <-  cbind(all10.1.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
-all0.0 <-  cbind(all0.0, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
-all10.0 <-  cbind(all10.0, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
-all0.0.72 <-  cbind(all0.0.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
-all10.0.72 <-  cbind(all10.0.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72)
+all0.1 <- cbind(all0.1, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72, col72a=all10.1$col72a)
+all10.1.72 <-  cbind(all10.1.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72, col72a=all10.1$col72a)
+all0.0 <-  cbind(all0.0, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72, col72a=all10.1$col72a)
+all10.0 <-  cbind(all10.0, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72, col72a=all10.1$col72a)
+all0.0.72 <-  cbind(all0.0.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72, col72a=all10.1$col72a)
+all10.0.72 <-  cbind(all10.0.72, place=all10.1$place, col=all10.1$col, place72=all10.1$place72, col72=all10.1$col72, col72a=all10.1$col72a)
 
 ##########################
 #RESISTANCE TRAITS
@@ -239,7 +239,7 @@ nums <- unlist(lapply(fitFlow, is.numeric))
 
 #aggregates
 #fitFlow.ag <- aggregate(fitFlow[, use.wells], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
-fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
+fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], mean, na.rm=TRUE)
 
 fitFlow.ag$cv.t10.G1.1 <- flow.ag.cv$t10.G1.1
 fitFlow.ag$change24adj <- sign(fitFlow.ag$change24)*log(abs(fitFlow.ag$change24)+1)

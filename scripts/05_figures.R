@@ -24,6 +24,13 @@ source("data_in/general/mvee.R")
 source("scripts/04_combine-MIC-flow.R")
 
 sub <- data.frame(place = as.factor(all10.1$place), data= all10.1$all10.1, col =all10.1$col)
+
+summary(lmer(all10.1.72 ~ log2(MIC24.10) * SMG72.10.2 + (1|line), data = fitFlow))
+
+fitFlow_1 <- subset(fitFlow, MIC24.10 == 1)
+
+print(summary(lmer(all10.1.72 ~ SMG72.10.2 + (1|line), data = fitFlow_1)))
+
 #################################
 #Fitness in FLC1
 #################################
@@ -210,25 +217,31 @@ dev.off()
 # Figure 4
 ####################
 
-MIC24.ag.less1 <- subset(fitFlow.plot.ag, MIC24 < 1)
-MIC24.ag.less1 <- MIC24.ag.less1[order(MIC24.ag.less1$place72),]
-MIC24.ag.1 <- subset(fitFlow.plot.ag, MIC24 == 1)
+
+fitFlow.ag$MIC24[fitFlow.ag$MIC24==0.000125] <- 0.25
+fitFlow.ag$MIC24.10[fitFlow.ag$MIC24.10==0.000125] <- 0.25
+fitFlow$MIC24[fitFlow$MIC24==0.000125] <- 0.25
+fitFlow$MIC24.10[fitFlow$MIC24.10==0.000125] <- 0.25
+
+MIC24.ag.less1 <- subset(fitFlow.ag, MIC24 < 1)
+MIC24.ag.less1 <- MIC24.ag.less1[order(MIC24.ag.less1$MIC24, MIC24.ag.less1$place72),]
+MIC24.ag.1 <- subset(fitFlow.ag, MIC24 == 1)
 MIC24.ag.1 <- MIC24.ag.1[order(MIC24.ag.1$place72),]
-MIC24.ag.more1 <- subset(fitFlow.plot.ag, MIC24 > 1)
+MIC24.ag.more1 <- subset(fitFlow.ag, MIC24 > 1)
 MIC24.ag.more1 <- MIC24.ag.more1[order(MIC24.ag.more1$MIC24),]
 
-MIC24.less1 <- subset(fitFlow.plot, line %in% MIC24.ag.less1$line)
-MIC24.less1 <- MIC24.less1[order(MIC24.less1$place72),]
-MIC24.1 <- subset(fitFlow.plot, line %in% MIC24.ag.1$line)
+MIC24.less1 <- subset(fitFlow, line %in% MIC24.ag.less1$line)
+MIC24.less1 <- MIC24.less1[order(MIC24.less1$MIC24, MIC24.less1$place72),]
+MIC24.1 <- subset(fitFlow, line %in% MIC24.ag.1$line)
 MIC24.1 <- MIC24.1[order(MIC24.1$place72),]
-MIC24.more1 <- subset(fitFlow.plot, line %in% MIC24.ag.more1$line)
+MIC24.more1 <- subset(fitFlow, line %in% MIC24.ag.more1$line)
 MIC24.more1 <- MIC24.more1[order(MIC24.more1$MIC24),]
 
 order72_MIC <- c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)
 
-fitFlow.plot$tabMIC10[fitFlow.plot$MIC24.10 < 1] <- "<1"
-fitFlow.plot$tabMIC10[fitFlow.plot$MIC24.10 == 1] <- "=1"
-fitFlow.plot$tabMIC10[fitFlow.plot$MIC24.10 > 1] <- ">1"
+fitFlow$tabMIC10[fitFlow.plot$MIC24.10 < 1] <- "<1"
+fitFlow$tabMIC10[fitFlow.plot$MIC24.10 == 1] <- "=1"
+fitFlow$tabMIC10[fitFlow.plot$MIC24.10 > 1] <- ">1"
 
 fitFlow.tab <- data.frame(table(as.numeric(fitFlow.plot$line), fitFlow.plot$tabMIC10))
 names(fitFlow.tab) <- c("line", "MIC24.10", "Freq")
@@ -254,16 +267,18 @@ mtext(expression("Ancestral \n" ~ MIC[50] ~ "= 1"), side= 1, adj = 0.65, line = 
 mtext(expression("Ancestral \n" ~ MIC[50] ~ "\n> 1"), side= 1, adj = 1, line=3, cex= 0.9)
 dev.off()
 
+
+
 pdf("manuscript/figures/Figure4-BMD_resist.pdf", width=7.5, height=4.5)
-plot(1:11, log(MIC24.ag.less1$MIC24), ylim=c(log(0.125), log(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3), xlim=c(1, 20))
-points(12:15, log(MIC24.ag.1$MIC24), pch="-", cex=2.25, col=grey(0.3))
-points(16:20, log(MIC24.ag.more1$MIC24), pch="-", cex=2.25, col=grey(0.3))
-points(jitter(rep(1:11, each=12)), log(MIC24.less1$MIC24.10), pch=21, col=MIC24.less1$col72)
+plot(1:11, log2(MIC24.ag.less1$MIC24), ylim=c(log2(0.25), log2(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3), xlim=c(1, 20))
+points(12:15, log2(MIC24.ag.1$MIC24), pch="-", cex=2.25, col=grey(0.3))
+points(16:20, log2(MIC24.ag.more1$MIC24), pch="-", cex=2.25, col=grey(0.3))
+points(jitter(rep(1:11, each=12)), log2(MIC24.less1$MIC24.10), pch=21, col=MIC24.less1$col72)
 abline(v=11.5, lty=2)
-points(jitter(rep(12:15, each=12)), log(MIC24.1$MIC24.10), pch=21, col=MIC24.1$col72)
+points(jitter(rep(12:15, each=12)), log2(MIC24.1$MIC24.10), pch=21, col=MIC24.1$col72)
 abline(v=15.5, lty=2)
-points(jitter(rep(16:20, each=12)), log(MIC24.more1$MIC24.10), pch=21, col=MIC24.more1$col72)
-axis(2, at=c(log(0.25),log(1), log(4), log(16), log(64), log(256)), labels=c("<1", "1", "4", "16", "64", ">128"), las=2)
+points(jitter(rep(16:20, each=12)), log2(MIC24.more1$MIC24.10), pch=21, col=MIC24.more1$col72)
+axis(2, at=c(log2(0.25),log2(1), log2(4), log2(16), log2(64), log2(256)), labels=c("0.25", "1", "4", "16", "64", ">128"), las=2)
 #abline(h=log(8), lty=2)
 mtext(expression(MIC[50]), side=2, line=2)
 axis(1, 1:20, labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
@@ -326,6 +341,87 @@ order <- c(13, 17, 11, 3, 15, 9, 14, 4, 16, 19, 10, 8, 20, 7, 2, 6, 12, 5, 1, 18
 
 #ordered by ancestral SMG - Figure 5
 #SMGorder <- order(fitFlow.ag$all0.1.72)
+pdf("manuscript/figures/Figure5-SMG72-above1ug-flip.pdf", width=8, height=5)
+plot(rep(1:11, each =12), MIC24.less1$SMG72.10.3, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 20), col =MIC24.less1$col72a, ylim=c(0,1.7))
+points(rep(12:15, each=12), MIC24.1$SMG72.10.3, cex=1.2, col=MIC24.1$col72a, pch=19)
+points(rep(16:20, each=12), MIC24.more1$SMG72.10.3, cex=1.2, col=MIC24.more1$col72a, pch=19)
+abline(v=11.5, lty=2)
+abline(v=15.5, lty=2)
+axis(1, 1:20, labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
+axis(1, c(2, 7, 10, 19) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 7, 10, 19)])),  cex.axis=0.8)
+
+points(1:11, MIC24.ag.less1$SMG72.up.3, pch="-", col="black", cex=2)
+points(1:11, MIC24.ag.less1$SMG72.down.3, pch="-", col="black", cex=2)
+arrows(1:11, MIC24.ag.less1$SMG72.up.3, 1:11, MIC24.ag.less1$SMG72.down.3, length=0, col="black")
+points(12:15, MIC24.ag.1$SMG72.up.3, pch="-", col="black", cex=2)
+points(12:15, MIC24.ag.1$SMG72.down.3, pch="-", col="black", cex=2)
+arrows(12:15, MIC24.ag.1$SMG72.up.3, 12:15, MIC24.ag.1$SMG72.down.3, length=0, col="black")
+points(16:20, MIC24.ag.more1$SMG72.up.3, pch="-", col="black", cex=2)
+points(16:20, MIC24.ag.more1$SMG72.down.3, pch="-", col="black", cex=2)
+arrows(16:20, MIC24.ag.more1$SMG72.up.3, 16:20, MIC24.ag.more1$SMG72.down.3, length=0, col="black")
+axis(2, las=2)
+mtext("Tolerance above FLC1 (72h)", side=2, line=3)
+dev.off()
+
+MIC24.less1_1 <- subset(MIC24.less1, MIC24.10 == 1)
+MIC24.1_1 <- subset(MIC24.1, MIC24.10 == 1)
+MIC24.more1_1 <- subset(MIC24.more1, MIC24.10 == 1)
+
+table(MIC24.less1_1$line)
+table(MIC24.1_1$line)
+table(MIC24.more1_1$line)
+
+pdf("manuscript/figures/Figure5-SMG72-aboveMIC-flip_MIC24-1.pdf", width=8, height=5)
+plot(rep(1:11, c(11, 3, 5, 5, 12, 10, 12, 9, 10, 8, 12)), MIC24.less1_1$SMG72.10.2, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 20), col = MIC24.less1_1$col72a, ylim=c(0,1))
+points(rep(12:15, c(11, 12, 11, 8)), MIC24.1_1$SMG72.10.2, cex=1.2, col=MIC24.1_1$col72a, pch=19)
+points(rep(16:20, c(0, 2, 0, 12, 6)), MIC24.more1_1$SMG72.10.2, cex=1.2, col=MIC24.more1_1$col72a, pch=19)
+abline(v=11.5, lty=2)
+abline(v=15.5, lty=2)
+axis(1, 1:20, labels=c(paste0("A", c(unique(MIC24.less1_1$line), unique(MIC24.1_1$line), unique(MIC24.more1$line)))), cex.axis=0.8)
+axis(1, c(2, 7, 10, 19) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 7, 10, 19)])),  cex.axis=0.8)
+
+points(1:11, MIC24.ag.less1$SMG72.up, pch="-", col="black", cex=2)
+points(1:11, MIC24.ag.less1$SMG72.down, pch="-", col="black", cex=2)
+arrows(1:11, MIC24.ag.less1$SMG72.up, 1:11, MIC24.ag.less1$SMG72.down, length=0, col="black")
+points(12:15, MIC24.ag.1$SMG72.up, pch="-", col="black", cex=2)
+points(12:15, MIC24.ag.1$SMG72.down, pch="-", col="black", cex=2)
+arrows(12:15, MIC24.ag.1$SMG72.up, 12:15, MIC24.ag.1$SMG72.down, length=0, col="black")
+points(16:20, MIC24.ag.more1$SMG72.up, pch="-", col="black", cex=2)
+points(16:20, MIC24.ag.more1$SMG72.down, pch="-", col="black", cex=2)
+arrows(16:20, MIC24.ag.more1$SMG72.up, 16:20, MIC24.ag.more1$SMG72.down, length=0, col="black")
+
+
+# points(16:18, MIC24.ag.more1$SMG72.up[c(2, 4, 5)], pch="-", col="black", cex=2)
+# points(16:18, MIC24.ag.more1$SMG72.down[c(2, 4, 5)], pch="-", col="black", cex=2)
+# arrows(16:18, MIC24.ag.more1$SMG72.up[c(2, 4, 5)], 16:18, MIC24.ag.more1$SMG72.down[c(2, 4, 5)], length=0, col="black")
+axis(2, las=2)
+mtext("Tolerance above MIC (72h)", side=2, line=3)
+dev.off()
+
+
+
+pdf("manuscript/figures/Figure5-SMG72-aboveMIC-flip.pdf", width=8, height=5)
+plot(rep(1:11, each =12), MIC24.less1$SMG72.10.2, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 20), col =MIC24.less1$col72a, ylim=c(0,1))
+points(rep(12:15, each=12), MIC24.1$SMG72.10.2, cex=1.2, col=MIC24.1$col72a, pch=19)
+points(rep(16:20, each=12), MIC24.more1$SMG72.10.2, cex=1.2, col=MIC24.more1$col72a, pch=19)
+abline(v=11.5, lty=2)
+abline(v=15.5, lty=2)
+axis(1, 1:20, labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
+axis(1, c(2, 7, 10, 19) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 7, 10, 19)])),  cex.axis=0.8)
+points(1:11, MIC24.ag.less1$SMG72.up, pch="-", col="black", cex=2)
+points(1:11, MIC24.ag.less1$SMG72.down, pch="-", col="black", cex=2)
+arrows(1:11, MIC24.ag.less1$SMG72.up, 1:11, MIC24.ag.less1$SMG72.down, length=0, col="black")
+points(12:15, MIC24.ag.1$SMG72.up, pch="-", col="black", cex=2)
+points(12:15, MIC24.ag.1$SMG72.down, pch="-", col="black", cex=2)
+arrows(12:15, MIC24.ag.1$SMG72.up, 12:15, MIC24.ag.1$SMG72.down, length=0, col="black")
+points(16:20, MIC24.ag.more1$SMG72.up, pch="-", col="black", cex=2)
+points(16:20, MIC24.ag.more1$SMG72.down, pch="-", col="black", cex=2)
+arrows(16:20, MIC24.ag.more1$SMG72.up, 16:20, MIC24.ag.more1$SMG72.down, length=0, col="black")
+axis(2, las=2)
+mtext("Tolerance above MIC (72h)", side=2, line=3)
+dev.off()
+
+
 pdf("manuscript/figures/Figure5-SMG72-above1ug.pdf", width=6, height=6)
 layout(matrix(1:2,nrow=1),widths=c(0.8,0.1))
 plot(subset(fitFlow, strain==17)$SMG72.10.3, rep(1, 12), ylim=c(0.5, 20.5), xlim=c(0, 1.8), yaxt="n", ylab="", xlab="", col=coloursVa[1], cex=1.2, pch=19)
@@ -370,7 +466,7 @@ system("open manuscript/figures/Figure5-SMG72-above1ug.pdf")
 ################
 #Ploidy
 ################
-pdf("manuscript/figures/Figure6-genomeSize.pdf", width=3, height=6)
+pdf("manuscript/figures/Figure6-genomeSize.pdf", width=3.25, height=7)
 par(mfrow=c(2, 1), mar=c(1, 1, 1, 1), oma=c(3, 4, 1, 1))
 plot(c(rep(1, 20), rep(2, 20)), c(flow.ag$t0.G1.mu, flow.ag$t10.G1.1), xlim=c(0.75, 2.25), xaxt="n", yaxt="n", ylim=c(140, 260), col=fitFlow.ag$col72, pch=19)
 axis(2, las=2)
@@ -378,10 +474,12 @@ for(i in 1:20){
   if (i %in% c(4, 9, 12))  lines(c(1, 2), c(flow.ag$t0.G1.mu[i], flow.ag$t10.G1.1[i]), lty=2)
   else lines(c(1, 2), c(flow.ag$t0.G1.mu[i], flow.ag$t10.G1.1[i]))
 }
+points(c(rep(1, 20), rep(2, 20)), c(flow.ag$t0.G1.mu, flow.ag$t10.G1.1), col=fitFlow.ag$col72, pch=19)
+
 axis(1, c(1, 2), labels=FALSE)
 mtext("median genome size \n (FITC intensity)", side=2, line=2.75)
 mtext("a" , side=3, adj=0.01, font=2, cex=1)
-mtext(" Genome size", side=3, adj=0.1)
+mtext("   Genome size", side=3, adj=0.1)
 
 
 plot(c(rep(1, 20), rep(2, 20)), c(flow.ag.cv$t0.G1.mu, flow.ag.cv$t10.G1.1), xlim=c(0.75, 2.25), xaxt="n", yaxt="n", ylim=c(0, 0.4), col=fitFlow.ag$col72, pch=19)
@@ -390,11 +488,12 @@ for(i in 1:20){
   if (i %in% c(1, 5, 12, 18))  lines(c(1, 2), c(flow.ag.cv$t0.G1.mu[i], flow.ag.cv$t10.G1.1[i]), lty=2)
   else lines(c(1, 2), c(flow.ag.cv$t0.G1.mu[i], flow.ag.cv$t10.G1.1[i]))
 }
+points(c(rep(1, 20), rep(2, 20)), c(flow.ag.cv$t0.G1.mu, flow.ag.cv$t10.G1.1), col=fitFlow.ag$col72, pch=19)
 axis(1, c(1, 2), labels=FALSE)
 axis(1, c(1, 2), labels=c("ancestral", "evolved"))
 mtext("b" , side=3, adj=0.01, font=2, cex=1)
 mtext("Coefficient of variation \n (FITC intensity)", side=2, line=2.75)
-mtext(" Genome size variation", side=3, adj=0.2)
+mtext("   Genome size variation", side=3, adj=0.2)
 dev.off()
 
 #################################
