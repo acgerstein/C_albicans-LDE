@@ -240,6 +240,7 @@ nums <- unlist(lapply(fitFlow, is.numeric))
 #aggregates
 #fitFlow.ag <- aggregate(fitFlow[, use.wells], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
 fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], mean, na.rm=TRUE)
+fitFlow.ag <- fitFlow.ag[order(as.numeric(fitFlow.ag$line)),]
 
 fitFlow.ag$cv.t10.G1.1 <- flow.ag.cv$t10.G1.1
 fitFlow.ag$change24adj <- sign(fitFlow.ag$change24)*log(abs(fitFlow.ag$change24)+1)

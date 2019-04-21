@@ -243,46 +243,46 @@ fitFlow$tabMIC10[fitFlow.plot$MIC24.10 < 1] <- "<1"
 fitFlow$tabMIC10[fitFlow.plot$MIC24.10 == 1] <- "=1"
 fitFlow$tabMIC10[fitFlow.plot$MIC24.10 > 1] <- ">1"
 
-fitFlow.tab <- data.frame(table(as.numeric(fitFlow.plot$line), fitFlow.plot$tabMIC10))
-names(fitFlow.tab) <- c("line", "MIC24.10", "Freq")
+#fitFlow.tab <- data.frame(table(as.numeric(fitFlow.plot$line), fitFlow.plot$tabMIC10))
+#names(fitFlow.tab) <- c("line", "MIC24.10", "Freq")
 
-fitFlow.tab.wide <- as_tibble(fitFlow.tab) %>%
-  spread(MIC24.10, Freq)
-fitFlow.tab.wide.flip <- t(fitFlow.tab.wide)
-fitFlow.tab.wide.flip[2,] <- as.numeric(fitFlow.tab.wide.flip[2,])
-
-pdf("manuscript/figures/Figure4-BMD_resist-bar.pdf", width=8.5, height=4.5)
-par(xpd=NA, oma=c(1, 1, 1, 8))
-m <- barplot(as.matrix(fitFlow.tab.wide.flip[2:4,as.numeric(order72_MIC)]), beside=FALSE, xaxt="n", yaxt="n", col=c("darkgrey", "purple", "orange"),  border=NA, space=c(rep(0.2, 11), 1.5, rep(0.2, 3), 1.5, rep(0.2, 5)), xlim=c(0.7, 26.1))
-axis(1, m[1:20][seq(1, 20, 2)], labels=FALSE)
-text(m[1:20][seq(1, 20, 2)], -1, paste0("A", order72_MIC[seq(1, 20, 2)]), cex=0.6)
-axis(1, m[1:20][seq(2, 21, 2)], labels = FALSE)
-text(m[1:20][seq(2, 21, 2)], -1, paste0("A", order72_MIC[seq(2, 21, 2)]), cex=0.6)
-axis(2, las=2)
-box()
-legend(29, 12, legend=c(expression(MIC[50] ~ "< 1", MIC[50] ~ "= 1", MIC[50] ~ "> 1" )), inset=0.05, pch=22, col=c("darkgrey", "purple", "orange"), pt.bg =c("darkgrey", "purple", "orange"), cex=0.7)
-mtext("number of evolved replicates", side=2, line=2)
-mtext(expression("Ancestral \n" ~ MIC[50] ~ "< 1"), side= 1, adj = 0.2, line = 3, cex= 0.9)
-mtext(expression("Ancestral \n" ~ MIC[50] ~ "= 1"), side= 1, adj = 0.65, line = 3, cex= 0.9)
-mtext(expression("Ancestral \n" ~ MIC[50] ~ "\n> 1"), side= 1, adj = 1, line=3, cex= 0.9)
-dev.off()
-
+# fitFlow.tab.wide <- as_tibble(fitFlow.tab) %>%
+#   spread(MIC24.10, Freq)
+# fitFlow.tab.wide.flip <- t(fitFlow.tab.wide)
+# fitFlow.tab.wide.flip[2,] <- as.numeric(fitFlow.tab.wide.flip[2,])
+#
+# pdf("manuscript/figures/Figure4-BMD_resist-bar.pdf", width=8.5, height=4.5)
+# par(xpd=NA, oma=c(1, 1, 1, 8))
+# m <- barplot(as.matrix(fitFlow.tab.wide.flip[2:4,as.numeric(order72_MIC)]), beside=FALSE, xaxt="n", yaxt="n", col=c("darkgrey", "purple", "orange"),  border=NA, space=c(rep(0.2, 11), 1.5, rep(0.2, 3), 1.5, rep(0.2, 5)), xlim=c(0.7, 26.1))
+# axis(1, m[1:20][seq(1, 20, 2)], labels=FALSE)
+# text(m[1:20][seq(1, 20, 2)], -1, paste0("A", order72_MIC[seq(1, 20, 2)]), cex=0.6)
+# axis(1, m[1:20][seq(2, 21, 2)], labels = FALSE)
+# text(m[1:20][seq(2, 21, 2)], -1, paste0("A", order72_MIC[seq(2, 21, 2)]), cex=0.6)
+# axis(2, las=2)
+# box()
+# legend(29, 12, legend=c(expression(MIC[50] ~ "< 1", MIC[50] ~ "= 1", MIC[50] ~ "> 1" )), inset=0.05, pch=22, col=c("darkgrey", "purple", "orange"), pt.bg =c("darkgrey", "purple", "orange"), cex=0.7)
+# mtext("number of evolved replicates", side=2, line=2)
+# mtext(expression("Ancestral \n" ~ MIC[50] ~ "< 1"), side= 1, adj = 0.2, line = 3, cex= 0.9)
+# mtext(expression("Ancestral \n" ~ MIC[50] ~ "= 1"), side= 1, adj = 0.65, line = 3, cex= 0.9)
+# mtext(expression("Ancestral \n" ~ MIC[50] ~ "\n> 1"), side= 1, adj = 1, line=3, cex= 0.9)
+# dev.off()
+#
 
 
 pdf("manuscript/figures/Figure4-BMD_resist.pdf", width=7.5, height=4.5)
-plot(1:11, log2(MIC24.ag.less1$MIC24), ylim=c(log2(0.25), log2(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3), xlim=c(1, 20))
-points(12:15, log2(MIC24.ag.1$MIC24), pch="-", cex=2.25, col=grey(0.3))
-points(16:20, log2(MIC24.ag.more1$MIC24), pch="-", cex=2.25, col=grey(0.3))
+plot(1:11, log2(MIC24.ag.less1$MIC24), ylim=c(log2(0.25), log2(256)), yaxt="n", xaxt="n", xlab="Strain", ylab="", pch="-", cex=2.25, col=grey(0.3), xlim=c(1, 22))
+points(13:16, log2(MIC24.ag.1$MIC24), pch="-", cex=2.25, col=grey(0.3))
+points(18:22, log2(MIC24.ag.more1$MIC24), pch="-", cex=2.25, col=grey(0.3))
 points(jitter(rep(1:11, each=12)), log2(MIC24.less1$MIC24.10), pch=21, col=MIC24.less1$col72)
-abline(v=11.5, lty=2)
-points(jitter(rep(12:15, each=12)), log2(MIC24.1$MIC24.10), pch=21, col=MIC24.1$col72)
-abline(v=15.5, lty=2)
-points(jitter(rep(16:20, each=12)), log2(MIC24.more1$MIC24.10), pch=21, col=MIC24.more1$col72)
-axis(2, at=c(log2(0.25),log2(1), log2(4), log2(16), log2(64), log2(256)), labels=c("0.25", "1", "4", "16", "64", ">128"), las=2)
+abline(v=12, lty=2)
+points(jitter(rep(13:16, each=12)), log2(MIC24.1$MIC24.10), pch=21, col=MIC24.1$col72)
+abline(v=17, lty=2)
+points(jitter(rep(18:22, each=12)), log2(MIC24.more1$MIC24.10), pch=21, col=MIC24.more1$col72)
+axis(2, at=c(log2(0.25),log2(1), log2(4), log2(16), log2(64), log2(256)), labels=c("< 0.5", "1", "4", "16", "64", ">128"), las=2)
 #abline(h=log(8), lty=2)
 mtext(expression(MIC[50]), side=2, line=2)
-axis(1, 1:20, labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
-axis(1, c(2, 6,8, 10, 12, 15, 18, 20) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 6,8, 10, 12, 15, 18, 20)])),  cex.axis=0.8)
+axis(1, c(1:11, 13:16, 18:22), labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
+axis(1, c(2, 4, 6, 8, 10, 14, 16, 19, 21) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 4, 6,8, 10, 13, 15, 17, 19)])),  cex.axis=0.8)
 #text(1:20, -3, paste0("A", fitFlow.plot.ag$line[place]), srt=-45, adj=0.1, xpd=NA)
 dev.off()
 
@@ -341,12 +341,13 @@ order <- c(13, 17, 11, 3, 15, 9, 14, 4, 16, 19, 10, 8, 20, 7, 2, 6, 12, 5, 1, 18
 
 #ordered by ancestral SMG - Figure 5
 #SMGorder <- order(fitFlow.ag$all0.1.72)
-pdf("manuscript/figures/Figure5-SMG72-above1ug-flip.pdf", width=8, height=5)
+pdf("manuscript/figures/Figure5-SMG72-above1ug-flip.pdf", width=7.5, height=5.5)
 plot(rep(1:11, each =12), MIC24.less1$SMG72.10.3, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 20), col =MIC24.less1$col72a, ylim=c(0,1.7))
 points(rep(12:15, each=12), MIC24.1$SMG72.10.3, cex=1.2, col=MIC24.1$col72a, pch=19)
 points(rep(16:20, each=12), MIC24.more1$SMG72.10.3, cex=1.2, col=MIC24.more1$col72a, pch=19)
 abline(v=11.5, lty=2)
 abline(v=15.5, lty=2)
+
 axis(1, 1:20, labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
 axis(1, c(2, 7, 10, 19) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 7, 10, 19)])),  cex.axis=0.8)
 
@@ -371,24 +372,28 @@ table(MIC24.less1_1$line)
 table(MIC24.1_1$line)
 table(MIC24.more1_1$line)
 
-pdf("manuscript/figures/Figure5-SMG72-aboveMIC-flip_MIC24-1.pdf", width=8, height=5)
-plot(rep(1:11, c(11, 3, 5, 5, 12, 10, 12, 9, 10, 8, 12)), MIC24.less1_1$SMG72.10.2, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 20), col = MIC24.less1_1$col72a, ylim=c(0,1))
-points(rep(12:15, c(11, 12, 11, 8)), MIC24.1_1$SMG72.10.2, cex=1.2, col=MIC24.1_1$col72a, pch=19)
-points(rep(16:20, c(0, 2, 0, 12, 6)), MIC24.more1_1$SMG72.10.2, cex=1.2, col=MIC24.more1_1$col72a, pch=19)
-abline(v=11.5, lty=2)
-abline(v=15.5, lty=2)
-axis(1, 1:20, labels=c(paste0("A", c(unique(MIC24.less1_1$line), unique(MIC24.1_1$line), unique(MIC24.more1$line)))), cex.axis=0.8)
-axis(1, c(2, 7, 10, 19) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 7, 10, 19)])),  cex.axis=0.8)
+pdf("manuscript/figures/Figure5-SMG72-aboveMIC-flip_MIC24-1.pdf", width=7.5, height=4.5)
+plot(rep(1:11, c(11, 3,5, 5, 10, 12, 10, 8, 12, 12, 9)), MIC24.less1_1$SMG72.10.2, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 22), col = MIC24.less1_1$col72a, ylim=c(0,1))
+points(rep(13:16, c(11, 12, 11, 8)), MIC24.1_1$SMG72.10.2, cex=1.2, col=MIC24.1_1$col72a, pch=19)
+points(rep(18:22, c(0, 2, 0, 12, 6)), MIC24.more1_1$SMG72.10.2, cex=1.2, col=MIC24.more1_1$col72a, pch=19)
+abline(v=12, lty=2)
+abline(v=17, lty=2)
+
+axis(1, c(1:11, 13:16, 18:22), labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line))), cex.axis=0.8)
+axis(1, c(2, 4, 6, 8, 10, 14, 16, 19, 21) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 4, 6,8, 10, 13, 15, 17, 19)])),  cex.axis=0.8)
+
+# axis(1, 1:20, labels=c(paste0("A", c(unique(MIC24.less1_1$line), unique(MIC24.1_1$line), unique(MIC24.more1$line)))), cex.axis=0.8)
+# axis(1, c(2, 7, 10, 19) , labels=c(paste0("A", c(MIC24.ag.less1$line, MIC24.ag.1$line, MIC24.ag.more1$line)[c(2, 7, 10, 19)])),  cex.axis=0.8)
 
 points(1:11, MIC24.ag.less1$SMG72.up, pch="-", col="black", cex=2)
 points(1:11, MIC24.ag.less1$SMG72.down, pch="-", col="black", cex=2)
 arrows(1:11, MIC24.ag.less1$SMG72.up, 1:11, MIC24.ag.less1$SMG72.down, length=0, col="black")
-points(12:15, MIC24.ag.1$SMG72.up, pch="-", col="black", cex=2)
-points(12:15, MIC24.ag.1$SMG72.down, pch="-", col="black", cex=2)
-arrows(12:15, MIC24.ag.1$SMG72.up, 12:15, MIC24.ag.1$SMG72.down, length=0, col="black")
-points(16:20, MIC24.ag.more1$SMG72.up, pch="-", col="black", cex=2)
-points(16:20, MIC24.ag.more1$SMG72.down, pch="-", col="black", cex=2)
-arrows(16:20, MIC24.ag.more1$SMG72.up, 16:20, MIC24.ag.more1$SMG72.down, length=0, col="black")
+points(13:16, MIC24.ag.1$SMG72.up, pch="-", col="black", cex=2)
+points(13:16, MIC24.ag.1$SMG72.down, pch="-", col="black", cex=2)
+arrows(13:16, MIC24.ag.1$SMG72.up, 13:16, MIC24.ag.1$SMG72.down, length=0, col="black")
+points(18:22, MIC24.ag.more1$SMG72.up, pch="-", col="black", cex=2)
+points(18:22, MIC24.ag.more1$SMG72.down, pch="-", col="black", cex=2)
+arrows(18:22, MIC24.ag.more1$SMG72.up, 18:22, MIC24.ag.more1$SMG72.down, length=0, col="black")
 
 
 # points(16:18, MIC24.ag.more1$SMG72.up[c(2, 4, 5)], pch="-", col="black", cex=2)
@@ -497,25 +502,25 @@ mtext("   Genome size variation", side=3, adj=0.2)
 dev.off()
 
 #################################
-#Ploidy (non)correlations
+#(non)correlations
 #################################
 
-pdf("manuscript/figures/Figure7-evolFit-evolPloidy-24h-SMG72.pdf", width=7, height=5)
+pdf("manuscript/figures/Figure6-evolFit_72h-evolPloidy.pdf", width=7, height=5)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(4, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
-for(i in c(place[1:16])){
+for(i in c(place72[1:16])){
   k <- k+1
-  plot(subset(fitFlow, line==i)$all10.1, subset(fitFlow, line==i)$t10.G1.1, ylim=c(100, 500), xlim=c(0, 2), xaxt="n", yaxt="n", pch=subset(fitFlow, line==i)$pch, bg=ifelse(subset(fitFlow, line ==i)$change72.SMG.3 >0, "black", "white"))
-  t <- cor.test(subset(fitFlow, line==i)$all10.1, subset(fitFlow, line==i)$t10.G1.1, method="spearman")
-  if(t$p.value < 0.05) abline(lm(subset(fitFlow, line==i)$t10.G1.1~subset(fitFlow, line==i)$all10.1), col="red")
-  if(t$p.value > 0.05) abline(lm(subset(fitFlow, line==i)$t10.G1.1~subset(fitFlow, line==i)$all10.1), col="red", lty=2)
+  plot(subset(fitFlow, line==i)$all10.1.72, subset(fitFlow, line==i)$t10.G1.1, ylim=c(100, 500), xlim=c(1, 2), xaxt="n", yaxt="n", pch=subset(fitFlow, line==i)$pch, bg=ifelse(subset(fitFlow, line ==i)$change72.SMG.2 >0, "black", "white"))
+  t <- cor.test(subset(fitFlow, line==i)$all10.1.72, subset(fitFlow, line==i)$t10.G1.1, method="spearman")
+  if(t$p.value < 0.05) abline(lm(subset(fitFlow, line==i)$t10.G1.1~subset(fitFlow, line==i)$all10.1.72), col="red")
+  if(t$p.value > 0.05) abline(lm(subset(fitFlow, line==i)$t10.G1.1~subset(fitFlow, line==i)$all10.1.72), col="red", lty=2)
   if(k > 12) axis(1)
   else axis(1, labels=FALSE)
   if(k %% 4 == 1) axis(2, las=2)
   else axis(2, labels=FALSE)
-  text(0, 450, paste0("A", i), pos=4, font=2, cex=1.1)
+  text(1, 450, paste0("A", i), pos=4, font=2, cex=1.1)
 }
-mtext("Evolved growth  in low drug", side=1, outer=TRUE, line=2)
+mtext("Evolved growth  in low drug (OD at 72 h)", side=1, outer=TRUE, line=2)
 mtext("Evolved genome size (FITC intensity)", side=2, outer=TRUE, line=2)
 dev.off()
 
@@ -539,43 +544,22 @@ mtext("Evolved growth in drug (72 h OD)", side=1, outer=TRUE, line=2)
 mtext("Evolved genome size (FITC intensity)", side=2, outer=TRUE, line=2)
 dev.off()
 
-#THESE SEEM UNNECESSARY
-pdf("/Users/acgerstein/Documents/Postdoc/Papers/MutAccum/Figures/FigureS5-SMG24-evolPloidy.pdf", width=7, height=5)
+
+pdf("manuscript/figures/Figure6-evolFit_72h-evolPloidy.pdf", width=7, height=5)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(4, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
-for(i in c(place[1:16])){
+for(i in c(place72[1:16])){
   k <- k+1
-  plot(subset(fitFlow.variable, line==i)$SMG24.10, subset(fitFlow.variable, line==i)$t10.G1.1, ylim=c(100, 500), xlim=c(0, 1), xaxt="n", yaxt="n")
-  t <- cor.test(subset(fitFlow.variable, line==i)$SMG24.10, subset(fitFlow.variable, line==i)$t10.G1.1, method="spearman")
-  if(t$p.value < 0.05) abline(lm(subset(fitFlow.variable, line==i)$t10.G1.1~subset(fitFlow.variable, line==i)$SMG24.10), col="red")
-  if(t$p.value > 0.05) abline(lm(subset(fitFlow.variable, line==i)$t10.G1.1~subset(fitFlow.variable, line==i)$SMG24.10), col="red", lty=2)
+  plot(subset(fitFlow, line==i)$all10.1.72, log2(subset(fitFlow, line==i)$MIC24.10), xlim=c(1, 2), ylim=c(log2(0.25), log2(256)), xaxt="n", yaxt="n", pch=subset(fitFlow, line==i)$pch, bg=ifelse(subset(fitFlow, line ==i)$change72.SMG.2 >0, "black", "white"))
+  t <- cor.test(subset(fitFlow, line==i)$all10.1.72, subset(fitFlow, line==i)$t10.G1.1, method="spearman")
+  if(t$p.value < 0.05) abline(lm(log2(subset(fitFlow, line==i)$MIC24.10)~subset(fitFlow, line==i)$all10.1.72), col="red")
+  if(t$p.value > 0.05) abline(lm(log2(subset(fitFlow, line==i)$MIC24.10)~subset(fitFlow, line==i)$all10.1.72), col="red", lty=2)
   if(k > 12) axis(1)
   else axis(1, labels=FALSE)
   if(k %% 4 == 1) axis(2, las=2)
   else axis(2, labels=FALSE)
-  text(0, 450, paste0("A", i), pos=4, font=2, cex=1.1)
+  text(1, 450, paste0("A", i), pos=4, font=2, cex=1.1)
 }
-mtext("Evolved tolerance (SMG24) ", side=1, outer=TRUE, line=2)
-mtext("Evolved genome size (FITC intensity)", side=2, outer=TRUE, line=2)
-dev.off()
-
-
-#Evolved ploidy * evolved SMG72
-pdf("/Users/acgerstein/Documents/Postdoc/Papers/MutAccum/Figures/FigureS6-SMG72-evolPloidy.pdf", width=7, height=5)
-k<-0
-par(mar=c(1, 1, 1, 1), mfrow=c(4, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
-for(i in c(place[1:16])){
-  k <- k+1
-  plot(subset(fitFlow, line==i)$SMG72.10.2, subset(fitFlow, line==i)$t10.G1.1, ylim=c(100, 500), xlim=c(0, 2), xaxt="n", yaxt="n", pch=subset(fitFlow, line==i)$pch)
-  t <- cor.test(subset(fitFlow, line==i)$SMG72.10.2, subset(fitFlow, line==i)$t10.G1.1, method="spearman")
-  if(t$p.value < 0.05) abline(lm(subset(fitFlow, line==i)$t10.G1.1~subset(fitFlow, line==i)$SMG72.10.2), col="red")
-  if(t$p.value > 0.05) abline(lm(subset(fitFlow, line==i)$t10.G1.1~subset(fitFlow, line==i)$SMG72.10.2), col="red", lty=2)
-  if(k > 12) axis(1)
-  else axis(1, labels=FALSE)
-  if(k %% 4 == 1) axis(2, las=2)
-  else axis(2, labels=FALSE)
-  text(2, 450, paste0("A", i), pos=2, font=2, cex=1.1)
-}
-mtext("Evolved tolerance (SMG72)", side=1, outer=TRUE, line=2)
+mtext("Evolved growth  in low drug (OD at 72 h)", side=1, outer=TRUE, line=2)
 mtext("Evolved genome size (FITC intensity)", side=2, outer=TRUE, line=2)
 dev.off()
