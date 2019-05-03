@@ -1,4 +1,23 @@
 library(viridis)
+#################################
+#Load libraries and functions
+#################################
+library(Hmisc)
+library(lme4)
+library(car)
+library(agricolae)
+library(lmerTest)
+library(ggbeeswarm)
+library(beeswarm)
+library(RColorBrewer)
+library(nlme)
+library(MASS)
+library(dplyr)
+options(stringsAsFactors = FALSE, max.print=5000)
+
+cv <-function(x) sd(x,na.rm=TRUE)/mean(x,na.rm=TRUE)
+se <- function(x, na.rm=TRUE) sqrt(var(x, na.rm=TRUE)/(length(x) - 1))
+source("data_in/general/mvee.R")
 
 #All disk assay and flow data
 se <- function(x, na.rm=TRUE) sqrt(var(x, na.rm=TRUE)/(length(x) - 1))
@@ -176,12 +195,12 @@ names(all10.0.72)[4:6] <- c("all10.0.72", "all10.0.72.sd", "all10.0.72.se")
 fitFlow <- data.frame(strain = rep(lines$strain, each=12), clade = rep(lines$clade, each=12), MTL = rep(lines$MTL, each=12), zygosity = rep(lines$zygosity, each=12), all0.1, all0.1.72[,4:6], all10.1[, 4:6], all10.1.72[,4:6], "t0.G1.1" = flow$t0.G1.mu,"t10.G1.1" =  flow$t10.G1.1*cor10, "t10.G1.2" = flow$t10.G1.2*cor10, "t10.G1.3" = flow$t10.G1.3*cor10,  MICall[, c(2:25)])
 
 fitFlow.ddn <- split(fitFlow, fitFlow$strain)
-SMG24.down <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.2, na.rm=TRUE)[1]))
-SMG24.up <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.2, na.rm=TRUE)[2]))
-SMG48.down <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.2, na.rm=TRUE)[1]))
-SMG48.up <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.2, na.rm=TRUE)[2]))
-SMG72.down <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.2, na.rm=TRUE)[1]))
-SMG72.up <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.2, na.rm=TRUE)[2]))
+SMG24.down.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.2, na.rm=TRUE)[1]))
+SMG24.up.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.2, na.rm=TRUE)[2]))
+SMG48.down.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.2, na.rm=TRUE)[1]))
+SMG48.up.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.2, na.rm=TRUE)[2]))
+SMG72.down.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.2, na.rm=TRUE)[1]))
+SMG72.up.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.2, na.rm=TRUE)[2]))
 
 #For >1ug
 SMG24.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.3, na.rm=TRUE)[1]))
@@ -241,29 +260,12 @@ nums <- unlist(lapply(fitFlow, is.numeric))
 #fitFlow.ag <- aggregate(fitFlow[, use.wells], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
 fitFlow.ag <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], mean, na.rm=TRUE)
 fitFlow.ag <- fitFlow.ag[order(as.numeric(fitFlow.ag$line)),]
+fitFlow.sd <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], sd, na.rm=TRUE)
+fitFlow.sd <- fitFlow.sd[order(as.numeric(fitFlow.sd$line)),]
+fitFlow.cv <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], cv, na.rm=TRUE)
+fitFlow.cv <- fitFlow.ag[order(as.numeric(fitFlow.cv$line)),]
 
-fitFlow.ag$cv.t10.G1.1 <- flow.ag.cv$t10.G1.1
-fitFlow.ag$change24adj <- sign(fitFlow.ag$change24)*log(abs(fitFlow.ag$change24)+1)
-fitFlow.ag$change72adj <- sign(fitFlow.ag$change72)*log(abs(fitFlow.ag$change72)+1)
-fitFlow.ag$change24ave <- fitFlow.ag$all10.1 - fitFlow.ag$all0.1
-fitFlow.ag$change72ave <- fitFlow.ag$all10.1.72 - fitFlow.ag$all0.1.72
-fitFlow.ag$SMG24.up <- SMG24.up
-fitFlow.ag$SMG24.down <- SMG24.down
-fitFlow.ag$SMG48.up <- SMG48.up
-fitFlow.ag$SMG48.down <- SMG48.down
-fitFlow.ag$SMG72.up <- SMG72.up
-fitFlow.ag$SMG72.down <- SMG72.down
-fitFlow.ag$SMG24.up.3 <- SMG24.up.3
-fitFlow.ag$SMG24.down.3 <- SMG24.down.3
-fitFlow.ag$SMG48.up.3 <- SMG48.up.3
-fitFlow.ag$SMG48.down.3 <- SMG48.down.3
-fitFlow.ag$SMG72.up.3 <- SMG72.up.3
-fitFlow.ag$SMG72.down.3 <- SMG72.down.3
-fitFlow.ag <- fitFlow.ag[order(as.numeric(fitFlow.ag$line)), ]
-fitFlow.sd <- aggregate(fitFlow[, nums], fitFlow[c("line", "clade", "zygosity", "col")], sd, na.rm=TRUE)
-fitFlow.sd <- fitFlow.sd[order(as.numeric(fitFlow.sd$line)), ]
-fitFlow.ag.variable <- subset(fitFlow.ag, line %in% c(2:4, 6:11, 13:17, 19, 20))
-fitFlow.sd.variable <- subset(fitFlow.sd, line %in% c(2:4, 6:11, 13:17, 19, 20))
+
 
 ###################################
 #change MIC values for plotting
@@ -295,3 +297,6 @@ fitFlow.plot.ag$MIC72.10[fitFlow.plot.ag$MIC72.10<1] <- 0.25
 fitFlow.plot.ag$MIC72[fitFlow.plot.ag$MIC72>128] <- 256
 fitFlow.plot.ag$MIC72.10[fitFlow.plot.ag$MIC72.10>128] <- 256
 fitFlow.plot.ag <- fitFlow.plot.ag[order(as.numeric(fitFlow.plot.ag$line)), ]
+
+#  save fitFlow
+write.csv(fitFlow,  "tables_intermediate_allFitFlow.csv")
