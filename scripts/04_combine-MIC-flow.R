@@ -229,6 +229,10 @@ fitFlow$change72 <- fitFlow$MIC72.10-fitFlow$MIC72 #this changes t0 to the media
 fitFlow$change24.SMG <- fitFlow$SMG24.10 - fitFlow$SMG24
 fitFlow$change48.SMG <- fitFlow$SMG48.10 - fitFlow$SMG48
 fitFlow$change72.SMG <- fitFlow$SMG72.10 - fitFlow$SMG72
+#this calculates tolerance like Alex
+fitFlow$SMG24.2 <- rep(MICall.ag$SMG24.2, each=12) #this changes t0 to the median
+fitFlow$SMG48.2 <- rep(MICall.ag$SMG48.2, each=12) #this changes t0 to the median
+fitFlow$SMG72.2 <- rep(MICall.ag$SMG72.2, each=12) #this changes t0 to the median
 fitFlow$change24.SMG.2 <- fitFlow$SMG24.10.2 - fitFlow$SMG24.2
 fitFlow$change48.SMG.2 <- fitFlow$SMG48.10.2 - fitFlow$SMG48.2
 fitFlow$change72.SMG.2 <- fitFlow$SMG72.10.2 - fitFlow$SMG72.2
@@ -264,8 +268,15 @@ fitFlow.sd <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "
 fitFlow.sd <- fitFlow.sd[order(as.numeric(fitFlow.sd$line)),]
 fitFlow.cv <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], cv, na.rm=TRUE)
 fitFlow.cv <- fitFlow.ag[order(as.numeric(fitFlow.cv$line)),]
+fitFlow.ag$SMG72.up <- SMG72.up.2[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG72.down <- SMG72.down.2[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG24.up <- SMG24.up.2[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG24.down <- SMG24.down.2[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG48.up <- SMG48.up.2[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG48.down <- SMG48.down.2[c(1, 12, 14:20, 2:11, 13)]
 
-
+fitFlow.ag.variable <- subset(fitFlow.ag, MIC24 <= 1)
+fitFlow.variable <- subset(fitFlow, MIC24 <= 1)
 
 ###################################
 #change MIC values for plotting
