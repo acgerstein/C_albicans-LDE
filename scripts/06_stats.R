@@ -68,14 +68,19 @@ plot(init72, fitnessGain72)
 #https://blogs.sas.com/content/iml/2014/07/14/log-transformation-of-pos-neg.html
 
 #on the strain average
-delta1.aov <- aov(delta1.24~ all0.1 +zygosity + as.factor(clade) , data=fitFlow.ag)
-# Df Sum Sq Mean Sq F value Pr(>F)
-# all0.ag.1         1 0.5410  0.5410   7.994 0.0143 *
-# zygosity          1 0.0184  0.0184   0.271 0.6112
-# as.factor(clade)  4 0.1734  0.0433   0.640 0.6430
-# Residuals        13 0.8798  0.0677
+delta1.lm <- lm(delta1.24~ all0.1 +zygosity + as.factor(clade) , data=fitFlow.ag)
+d1 <- tidy(anova(delta1.lm))
+d1$varExp <- d1[,3]/sum(d1[,3])*100
+# term                df  sumsq meansq statistic p.value varExp$sumsq
+# <chr>            <int>  <dbl>  <dbl>     <dbl>   <dbl>        <dbl>
+#   1 all0.1               1 0.541  0.541      7.99   0.0143        33.5
+# 2 zygosity             1 0.0184 0.0184     0.271  0.611          1.14
+# 3 as.factor(clade)     4 0.173  0.0433     0.640  0.643         10.8
+# 4 Residuals           13 0.880  0.0677    NA     NA             54.6
+
 
 #mixed-effect treating strain as a random effect - exact same result (woo!)
+#not in MS
 delta1.lmer <- lmer(delta1.24 ~ all0.1+ as.factor(clade) +zygosity + (1|strain), data = fitFlow)
 anova(delta1.lmer, type = 3)
 # Type III Analysis of Variance Table with Satterthwaite's method
@@ -84,13 +89,17 @@ anova(delta1.lmer, type = 3)
 # as.factor(clade) 0.17111 0.04278     4 13.646  0.6436 0.640561
 # zygosity         0.03481 0.03481     1 13.672  0.5237 0.481477
 
+delta1.72.aov <- lm(delta1.72~ all0.1.72 +zygosity + clade , data=fitFlow.ag)
+d1.72 <- tidy(delta1.72.aov)
+d1.72$varExp <- d1.72[,3]/sum(d1.72[,3])*100
+# term         df   sumsq  meansq statistic       p.value varExp$sumsq
+# <chr>     <dbl>   <dbl>   <dbl>     <dbl>         <dbl>        <dbl>
+# all0.1.72     1 1.37    1.37      159.     0.0000000116       88.3
+# zygosity      1 0.00215 0.00215     0.248  0.626               0.138
+# clade         4 0.0681  0.0170      1.97   0.159               4.38
+# Residuals    13 0.112   0.00865    NA     NA                   7.23
 
-delta1.72.aov <- aov(delta1.72~ all0.ag.1.72 +zygosity + clade , data=fitFlow.ag)
-# Df Sum Sq Mean Sq F value       Pr(>F)
-# all0.ag.1.72  1 1.3723  1.3723 158.730 0.0000000116 ***
-# clade         4 0.0681  0.0170   1.970        0.159
-# zygosity      1 0.0021  0.0021   0.248        0.626
-# Residuals    13 0.1124  0.0086
+
 
 #same result whether on average or looking at variability
 delta1.72.lmer <- lmer(delta1.72 ~ all0.1.72+ as.factor(clade) +zygosity + (1|strain), data = fitFlow)
@@ -103,20 +112,26 @@ anova(delta1.72.lmer, type = 3)
 
 ###Look at variability
 #can only do sd looking among replicates
-delta1.variance24.aov <- aov(c(fitFlow.sd$all10.1-fitFlow.sd$all0.1) ~ fitFlow.ag$all0.1 + fitFlow.sd$zygosity + as.factor(fitFlow.sd$clade))
-# Df  Sum Sq Mean Sq F value    Pr(>F)
-# fitFlow.ag$all0.1            1 0.24434 0.24434  40.941 0.0000235 ***
-#   fitFlow.sd$zygosity          1 0.01325 0.01325   2.220     0.160
-# as.factor(fitFlow.sd$clade)  4 0.01950 0.00488   0.817     0.537
-# Residuals                   13 0.07759 0.00597
+delta1.variance24.lm <- lm(c(fitFlow.sd$all10.1-fitFlow.sd$all0.1) ~ fitFlow.ag$all0.1 + fitFlow.sd$zygosity + as.factor(fitFlow.sd$clade))
+d1.sd <- tidy(anova(delta1.variance24.lm))
+d1.sd$varExp <- d1.sd[,3]/sum(d1.sd[,3])*100
+# term                           df  sumsq  meansq statistic    p.value varExp$sumsq
+# <chr>                       <int>  <dbl>   <dbl>     <dbl>      <dbl>        <dbl>
+#   1 fitFlow.ag$all0.1               1 0.244  0.244      40.9    0.0000235        68.9
+# 2 fitFlow.sd$zygosity             1 0.0132 0.0132      2.22   0.160             3.74
+# 3 as.factor(fitFlow.sd$clade)     4 0.0195 0.00488     0.817  0.537             5.50
+# 4 Residuals                      13 0.0776 0.00597    NA     NA                21.9
 
-delta1.variance72.aov <- aov(c(fitFlow.sd$all10.1.72-fitFlow.sd$all0.1.72) ~ fitFlow.ag$all0.1.72 +zygosity + clade , data=fitFlow.ag)
-# Df  Sum Sq Mean Sq F value Pr(>F)
-# fitFlow.ag$all0.1.72  1 0.03437 0.03437   6.352 0.0256 *
-#   zygosity              1 0.00614 0.00614   1.136 0.3060
-# clade                 4 0.02195 0.00549   1.014 0.4356
-# Residuals            13 0.07033 0.00541
 
+delta1.variance72.lm <- lm(c(fitFlow.sd$all10.1.72-fitFlow.sd$all0.1.72) ~ fitFlow.ag$all0.1.72 +zygosity + clade , data=fitFlow.ag)
+d1.sd.72 <- tidy(anova(delta1.variance72.lm))
+d1.sd.72$varExp <- d1.sd.72[,3]/sum(d1.sd.72[,3])*100
+# term                    df   sumsq  meansq statistic p.value varExp$sumsq
+# <chr>                <int>   <dbl>   <dbl>     <dbl>   <dbl>        <dbl>
+#   1 fitFlow.ag$all0.1.72     1 0.0344  0.0344       6.35  0.0256        25.9
+# 2 zygosity                 1 0.00614 0.00614      1.14  0.306          4.63
+# 3 clade                    4 0.0220  0.00549      1.01  0.436         16.5
+# 4 Residuals               13 0.0703  0.00541     NA    NA             53.0
 
 # There is also a significant negative correlation between the degree of fitness change in low drug and the variance in evolved fitness among replicates – replicate lines were more variable in strain backgrounds that increased in fitness the most.
 cor.test(fitFlow.ag$delta1.24, fitFlow.sd$all10.ag.1, paired=TRUE, method="spearman") #S = 694, p-value = 0.03451, rho = 0.48
@@ -159,7 +174,11 @@ table(SMG72down.MIC1$strain)
 # 3  1  6  9  8  9  6  1  4  3  7  3  1  5  4
 
 cor.test(fitFlow.ag$SMG72, fitFlow.ag$MIC24, method="spearman")
-S = 1068.8, p-value = 0.4066
+#S = 1068.8, p-value = 0.4066
+cor.test(fitFlow.ag$SMG72.10, fitFlow.ag$MIC24, method="spearman")
+#S = 1082.5, p-value = 0.4322
+cor.test(fitFlow.ag$SMG72.10, fitFlow.ag$MIC24.10, method="spearman")
+#S = 1018.3, p-value = 0.3199
 
 fitFlow_MIC1 <- subset(fitFlow, MIC24.10 == 1)
 fitFlow_MIC1$clade <- as.factor(fitFlow_MIC1$clade)
@@ -239,7 +258,7 @@ summary(SMGevol.lmer)
 qqnorm(resid(SMGevol.lmer))
 qqline(resid(SMGevol.lmer))
 
-#Not influenced by a single strain
+#Influenced by single strains
 for(i in unique(fitFlow_MIC1$strain)){
   print(i)
   test_lmer_drop <- lmer(change72.SMG.2~ delta1.72 + zygosity+as.factor(clade) + (1|strain), data=subset(fitFlow_MIC1, strain!=i, REML = FALSE))
@@ -250,11 +269,14 @@ for(i in unique(fitFlow_MIC1$strain)){
 #zygosity: A3, A5, A6, A7, A8, A9, A12, A13, A14, A15, A16, A17, A20
 #clade: A4, A5, A6, A7, A8, A9, A10, A12, A13, A14, A15, A17, A20
 
-cor.test(fitFlow.sd$change72.SMG.2, fitFlow.ag$all0.1, method="spearman") #S = 2076, p-value = 0.01131, rho = -0.55
-cor.test(fitFlow.sd$change72.SMG.2, fitFlow.ag$all0.1.72, method="spearman") #S = 1838, p-value = 0.09739
 
-cor.test(fitFlow.sd$change72.SMG.2, fitFlow.sd$delta1.24, method="spearman") #S = 586, p-value = 0.01157
-cor.test(fitFlow.sd$change72.SMG.2, fitFlow.sd$delta1.72, method="spearman") #S = 556, p-value = 0.008166
+SMGanc.lmer <- lm(SMG48.2 ~ zygosity + as.factor(clade) + MIC24, data=fitFlow.ag)
+anova(SMGanc.lmer)
+# Df  Sum Sq  Mean Sq F value  Pr(>F)
+# zygosity          1 0.01712 0.017123  0.5629 0.46647
+# as.factor(clade)  4 0.48583 0.121457  3.9925 0.02507 *
+#   MIC24             1 0.02859 0.028594  0.9399 0.34998
+# Residuals        13 0.39547 0.030421
 
 
 

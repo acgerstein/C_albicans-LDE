@@ -195,21 +195,20 @@ names(all10.0.72)[4:6] <- c("all10.0.72", "all10.0.72.sd", "all10.0.72.se")
 fitFlow <- data.frame(strain = rep(lines$strain, each=12), clade = rep(lines$clade, each=12), MTL = rep(lines$MTL, each=12), zygosity = rep(lines$zygosity, each=12), all0.1, all0.1.72[,4:6], all10.1[, 4:6], all10.1.72[,4:6], "t0.G1.1" = flow$t0.G1.mu,"t10.G1.1" =  flow$t10.G1.1*cor10, "t10.G1.2" = flow$t10.G1.2*cor10, "t10.G1.3" = flow$t10.G1.3*cor10,  MICall[, c(2:25)])
 
 fitFlow.ddn <- split(fitFlow, fitFlow$strain)
-SMG24.down.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.2, na.rm=TRUE)[1]))
-SMG24.up.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.2, na.rm=TRUE)[2]))
-SMG48.down.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.2, na.rm=TRUE)[1]))
-SMG48.up.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.2, na.rm=TRUE)[2]))
-SMG72.down.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.2, na.rm=TRUE)[1]))
-SMG72.up.2 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.2, na.rm=TRUE)[2]))
+SMG24.down <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24, na.rm=TRUE)[1]))
+SMG24.up <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24, na.rm=TRUE)[2]))
+SMG48.down <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48, na.rm=TRUE)[1]))
+SMG48.up <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48, na.rm=TRUE)[2]))
+SMG72.down <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72, na.rm=TRUE)[1]))
+SMG72.up <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72, na.rm=TRUE)[2]))
 
-#For >1ug
-SMG24.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.3, na.rm=TRUE)[1]))
-SMG24.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.3, na.rm=TRUE)[2]))
-SMG48.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.3, na.rm=TRUE)[1]))
-SMG48.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.3, na.rm=TRUE)[2]))
-SMG72.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TRUE)[1]))
-SMG72.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TRUE)[2]))
-
+# #For >1ug
+# SMG24.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.3, na.rm=TRUE)[1]))
+# SMG24.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG24.3, na.rm=TRUE)[2]))
+# SMG48.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.3, na.rm=TRUE)[1]))
+# SMG48.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG48.3, na.rm=TRUE)[2]))
+# SMG72.down.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TRUE)[1]))
+# SMG72.up.3 <- unlist(lapply(fitFlow.ddn, function(x) range(x$SMG72.3, na.rm=TRUE)[2]))
 
 
 fitFlow$lr <- paste(fitFlow$line, fitFlow$rep, sep=".")
@@ -229,21 +228,6 @@ fitFlow$change72 <- fitFlow$MIC72.10-fitFlow$MIC72 #this changes t0 to the media
 fitFlow$change24.SMG <- fitFlow$SMG24.10 - fitFlow$SMG24
 fitFlow$change48.SMG <- fitFlow$SMG48.10 - fitFlow$SMG48
 fitFlow$change72.SMG <- fitFlow$SMG72.10 - fitFlow$SMG72
-#this calculates tolerance like Alex
-fitFlow$SMG24.2 <- rep(MICall.ag$SMG24.2, each=12) #this changes t0 to the median
-fitFlow$SMG48.2 <- rep(MICall.ag$SMG48.2, each=12) #this changes t0 to the median
-fitFlow$SMG72.2 <- rep(MICall.ag$SMG72.2, each=12) #this changes t0 to the median
-fitFlow$change24.SMG.2 <- fitFlow$SMG24.10.2 - fitFlow$SMG24.2
-fitFlow$change48.SMG.2 <- fitFlow$SMG48.10.2 - fitFlow$SMG48.2
-fitFlow$change72.SMG.2 <- fitFlow$SMG72.10.2 - fitFlow$SMG72.2
-#this calculates growth above 1ug
-fitFlow$SMG24.3 <- rep(MICall.ag$SMG24.3, each=12) #this changes t0 to the median
-fitFlow$SMG48.3 <- rep(MICall.ag$SMG48.3, each=12) #this changes t0 to the median
-fitFlow$SMG72.3 <- rep(MICall.ag$SMG72.3, each=12) #this changes t0 to the median
-fitFlow$change24.SMG.3 <- fitFlow$SMG24.10.3 - fitFlow$SMG24.3
-fitFlow$change48.SMG.3 <- fitFlow$SMG48.10.3 - fitFlow$SMG48.3
-fitFlow$change72.SMG.3 <- fitFlow$SMG72.10.3 - fitFlow$SMG72.3
-
 
 fitFlow$lr <- paste(fitFlow$line, fitFlow$rep, sep="-")
 
@@ -268,12 +252,12 @@ fitFlow.sd <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "
 fitFlow.sd <- fitFlow.sd[order(as.numeric(fitFlow.sd$line)),]
 fitFlow.cv <- aggregate(fitFlow[, nums], fitFlow[c("clade", "zygosity", "col", "col72", "col72a", "line")], cv, na.rm=TRUE)
 fitFlow.cv <- fitFlow.ag[order(as.numeric(fitFlow.cv$line)),]
-fitFlow.ag$SMG72.up <- SMG72.up.2[c(1, 12, 14:20, 2:11, 13)]
-fitFlow.ag$SMG72.down <- SMG72.down.2[c(1, 12, 14:20, 2:11, 13)]
-fitFlow.ag$SMG24.up <- SMG24.up.2[c(1, 12, 14:20, 2:11, 13)]
-fitFlow.ag$SMG24.down <- SMG24.down.2[c(1, 12, 14:20, 2:11, 13)]
-fitFlow.ag$SMG48.up <- SMG48.up.2[c(1, 12, 14:20, 2:11, 13)]
-fitFlow.ag$SMG48.down <- SMG48.down.2[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG72.up <- SMG72.up[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG72.down <- SMG72.down[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG24.up <- SMG24.up[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG24.down <- SMG24.down[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG48.up <- SMG48.up[c(1, 12, 14:20, 2:11, 13)]
+fitFlow.ag$SMG48.down <- SMG48.down[c(1, 12, 14:20, 2:11, 13)]
 
 fitFlow.ag.variable <- subset(fitFlow.ag, MIC24 <= 1)
 fitFlow.variable <- subset(fitFlow, MIC24 <= 1)
@@ -311,3 +295,12 @@ fitFlow.plot.ag <- fitFlow.plot.ag[order(as.numeric(fitFlow.plot.ag$line)), ]
 
 #  save fitFlow
 write.csv(fitFlow,  "tables_intermediate_allFitFlow.csv")
+
+fitFlow.0 <- data.frame(strain = rep(lines$strain, each=12), clade = rep(lines$clade, each=12), MTL = rep(lines$MTL, each=12), zygosity = rep(lines$zygosity, each=12), all0.0, all0.0.72[,4:6], all10.0[, 4:6], all10.0.72[,4:6], "t0.G1.1" = flow$t0.G1.mu,"t10.G1.1" =  flow$t10.G1.1*cor10, "t10.G1.2" = flow$t10.G1.2*cor10, "t10.G1.3" = flow$t10.G1.3*cor10,  MICall[, c(2:13)])
+
+nums0 <- unlist(lapply(fitFlow.0, is.numeric))
+
+#aggregates
+#fitFlow.ag <- aggregate(fitFlow[, use.wells], fitFlow[c("clade", "zygosity", "col", "col72", "line")], mean, na.rm=TRUE)
+fitFlow.ag.0 <- aggregate(fitFlow.0[, nums0], fitFlow.0[c("clade", "zygosity", "col", "col72", "col72a", "line")], mean, na.rm=TRUE)
+fitFlow.ag.0 <- fitFlow.ag.0[order(as.numeric(fitFlow.ag.0$line)),]

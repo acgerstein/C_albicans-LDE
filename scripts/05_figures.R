@@ -3,6 +3,7 @@
 #################################
 source("scripts/04_combine-MIC-flow.R")
 
+
 #################################
 #Fitness in FLC1
 #################################
@@ -55,22 +56,20 @@ fitFlow.ag$change72ave <- fitFlow.ag$all10.1.72 - fitFlow.ag$all0.1.72
 
 pdf("manuscript/figures/Figure2-OD1cor-mean_SD.pdf", width=7, height=6)
 par(mfrow=c(2, 2),mar=c(1,1 , 1, 1), oma=c(3, 4, 1, 1))
-plot(fitFlow.ag$all0.1, fitFlow.ag$change24ave, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1), cex=1.5)
+plot(fitFlow.ag$all0.1, c(fitFlow.ag$all10.1-fitFlow.ag$all0.1), xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1), cex=1.5)
 axis(1, labels=FALSE)
 axis(2, las=2)
 mtext("Assessed at 24h", side=3, adj=0.01)
-abline(lm(fitFlow.ag$change24ave~fitFlow.ag$all0.1))
-text(-0.1, -0.18, "cor = -0.58", pos=4, cex=1.25)
+abline(lm(c(fitFlow.ag$all10.1-fitFlow.ag$all0.1)~fitFlow.ag$all0.1))
 txt <- expression(paste(Delta," mean fitness"))
 mtext(txt, side=2, outer=FALSE, line=2.5)
 
 par(mar=c(1,1 , 1, 1))
-plot(fitFlow.ag$all0.1.72, fitFlow.ag$all10.1.72-fitFlow.ag$all0.1.72, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1), cex=1.5)
+plot(fitFlow.ag$all0.1.72, c(fitFlow.ag$all10.1.72-fitFlow.ag$all0.1.72), xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.2, 1), cex=1.5)
 axis(1, labels=FALSE)
 axis(2, labels=FALSE)
 mtext("Assessed at 72h", side=3, adj=0.01)
-abline(lm(fitFlow.ag$change72ave~fitFlow.ag$all0.1.72))
-text(-0.1, -0.18, "cor = -0.94", pos=4, cex=1.25)
+abline(lm(c(fitFlow.ag$all10.1.72-fitFlow.ag$all0.1.72)~fitFlow.ag$all0.1.72))
 
 plot(fitFlow.ag$all0.1, fitFlow.sd$all10.1-fitFlow.sd$all0.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.1, 0.45), cex=1.5)
 axis(1, labels=FALSE)
@@ -80,13 +79,11 @@ axis(2, las=2)
 axis(1)
 txt <- expression(paste(Delta," replicate variation"))
 mtext(txt, side=2, outer=FALSE, line=2.5)
-text(-0.1, -0.08, "cor = -0.77", pos=4, cex=1.25)
 
 plot(fitFlow.ag$all0.1.72, fitFlow.sd$all10.1.72-fitFlow.sd$all0.1.72, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(-0.1, 0.45), cex=1.5)
 axis(1)
 axis(2, labels=FALSE)
 abline(lm(c(fitFlow.sd$all10.1-fitFlow.sd$all0.1)~fitFlow.ag$all0.1))
-text(-0.1, -0.08, "cor = -0.47", pos=4, cex=1.25)
 mtext("Initial fitness", side=1, outer=TRUE, line=1.5)
 dev.off()
 system("open manuscript/figures/Figure2-OD1cor-mean_SD.pdf")
@@ -236,7 +233,7 @@ system("open manuscript/figures/Figure3b-SMG72-aboveMIC-flip_MIC24-1.pdf")
 ######################################################################
 #Figure S2: Change in evolved tolerance versus change in evolved fitness
 ######################################################################
-pdf("manuscript/figures/FigureS3-DeltaEvolFit_72h-DeltaEvolSMG.pdf", width=7, height=5)
+pdf("manuscript/figures/FigureS2-DeltaEvolFit_72h-DeltaEvolSMG.pdf", width=7, height=5)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
 for(i in c(order72_MIC[1:20])){
@@ -264,7 +261,7 @@ for(i in c(order72_MIC[1:20])){
 mtext("Change in fitness (OD at 72 h)", side=1, outer=TRUE, line=2)
 mtext("Change in tolerance (72 h)", side=2, line=2, outer = TRUE)
 dev.off()
-system("open manuscript/figures/FigureS3-DeltaEvolFit_72h-DeltaEvolSMG.pdf")
+system("open manuscript/figures/FigureS2-DeltaEvolFit_72h-DeltaEvolSMG.pdf")
 ################
 #Ploidy
 ################
@@ -484,3 +481,40 @@ system("open manuscript/figures/FigureS4-deltaSMG-evolPloidy.pdf")
 # mtext("Initial growth ability", side=1, outer=TRUE, line=1.5)
 # dev.off()
 # system("open manuscript/figures/FigureSx-ancOD1_cor_SMG-mean-SD.pdf")
+
+
+####
+outliers <- c("2_7", "3_3", "3_5", "3_7", "3_12", "5_3", "5_10", "5_12", "7_7", "8_5", "8_6", "8_8", "17_2", "19_8", "19_9")
+par(mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(3, 4, 1, 1))
+for(i in 1:20){
+  sub_t0 <- subset(all0, line == i)
+  sub_t0$enviro[sub_t0$enviro == 0.000125] <- 0.0625
+  sub_t0_ag <- aggregate(sub_t0["data"], sub_t0[c("enviro")], median)
+  sub <- subset(all10, line == i)
+  sub$enviro[sub$enviro == 0.000125] <- 0.0625
+  sub_ag <-  aggregate(sub["dataM"], sub[c("enviro", "rep", "lr")], median)
+  sub_ag1 <- subset(sub_ag, rep == 1)
+  plot(log(sub_ag1$enviro), sub_ag1$dataM, type="l", yaxt="n", xaxt="n", ylim=c(0, 2), lwd=0.5, col="grey")
+  abline(v=log(1), col="grey", lwd=2)
+  for (k in 1:12){
+    sub_ag_sub <- subset(sub_ag, rep == k)
+    points(log(sub_ag_sub$enviro), sub_ag_sub$dataM, type="l", col= ifelse(sub_ag_sub$lr[1] %in% outliers, "black", "black"), lwd = ifelse(sub_ag_sub$lr[1] %in% outliers, 3, 0.5))
+  }
+  points(log(sub_t0_ag$enviro), sub_t0_ag$data, type="l", lwd=3, col="red")
+  if(i %% 4 ==1) axis(2, las=2)
+  else axis(2, labels=FALSE)
+  if (i > 16) axis(1, at = log(c(0.0625, 0.25, 1, 4, 16, 64)), labels=c("0", "0.25", "1", "4", "16", "64"))
+  else axis(1, at = log(c(0.0625, 0.25, 1, 4, 16, 64)), labels=FALSE)
+
+  #abline(h=subset(sub_t0_ag, enviro=="0.0625")$data/2, col="blue")
+  mtext(paste0("A", sub$line[1]), side=3, adj=0.01)
+}
+  mtext("Fluconazole concentration (ug)", side=1, outer=TRUE, line=2)
+  mtext("Optical density (24 h)", side=2, outer=TRUE, line=2)
+
+# so if MIC at no drug drops then can tehnically see an increase in MIC with similar OD at higher levels of drug compared to the ancestor
+# Really hard to read MIC from ETest when there is a lot of background growth - A3! A5!
+# If want to continue this, it's not about the few errant strains that increased i MIC. Look at the strains that increased tolerance -> A3
+# Worth doing a disk assay to see when that change happened in A3 (A5 always seems high?)
+# If at varying points then could sequence those strains?
+# GC75 - thankfully (!) also in Quinns experiment ("A12")

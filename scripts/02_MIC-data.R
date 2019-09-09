@@ -15,12 +15,12 @@ all10.48$lr <-paste(all10.48$line, all10.72$rep, sep="_")
 all10.72$lr <-paste(all10.72$line, all10.72$rep, sep="_")
 
 #this is not really necessary for the MIC analysis, but is needed for plotting log2(enviro)
-all0$enviro[all0$enviro==0] <- 0.000125
-all0.48$enviro[all0.48$enviro==0] <- 0.000125
-all0.72$enviro[all0.72$enviro==0] <- 0.000125
-all10$enviro[all10$enviro==0] <- 0.000125
-all10.48$enviro[all10.48$enviro==0] <- 0.000125
-all10.72$enviro[all10.72$enviro==0] <- 0.000125
+all0$enviro[all0$enviro==0] <- 0.0625
+all0.48$enviro[all0.48$enviro==0] <- 0.0625
+all0.72$enviro[all0.72$enviro==0] <- 0.0625
+all10$enviro[all10$enviro==0] <- 0.0625
+all10.48$enviro[all10.48$enviro==0] <- 0.0625
+all10.72$enviro[all10.72$enviro==0] <- 0.0625
 
 #remove 512 information
 all0 <- filter(all0, enviro!= 512)
@@ -46,7 +46,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
   ag <- aggregate(x["data"], x["enviro"], median)
   MIC <- findMIC2(ag)
    SMG <- sum(ag$data[ag$enviro>MIC])/length(ag$data[ag$enviro>MIC])
-   SMG2 <- SMG/subset(ag, enviro==0.000125)$data
+   SMG2 <- SMG/subset(ag, enviro==0.0625)$data
    SMG3 <- sum(ag$data[ag$enviro>1])/length(ag$data[ag$enviro>1])
 #   SMG3 <- SMG.b/subset(ag, enviro==1)$data
   c(MIC, SMG, SMG2, SMG3)
@@ -58,7 +58,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
     MIC24 <- findMIC2(ag.24)
     MIC <- findMIC2(ag.48)
      SMG <- sum(ag.48$data[ag.48$enviro>MIC24])/length(ag.48$data[ag.48$enviro>MIC24])
-     SMG2 <- SMG/subset(ag.48, enviro==0.000125)$data
+     SMG2 <- SMG/subset(ag.48, enviro==0.0625)$data
      SMG3 <- sum(ag.48$data[ag.48$enviro>1])/length(ag.48$data[ag.48$enviro>1])
      #SMG3 <- SMG.b/subset(ag.48, enviro==1)$data
     c(MIC, SMG, SMG2, SMG3)
@@ -70,7 +70,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
       MIC24 <- findMIC2(ag.24)
       MIC <- findMIC2(ag.72)
       SMG <- sum(ag.72$data[ag.72$enviro>MIC24])/length(ag.72$data[ag.72$enviro>MIC24])
-      SMG2 <- SMG/subset(ag.72, enviro==0.000125)$data
+      SMG2 <- SMG/subset(ag.72, enviro==0.0625)$data
       SMG3 <- sum(ag.72$data[ag.72$enviro>1])/length(ag.72$data[ag.72$enviro>1])
       #SMG3 <- SMG.b/subset(ag.72, enviro==1)$data
       c(MIC, SMG, SMG2, SMG3)
@@ -80,7 +80,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
     ag <- aggregate(x["dataM"], x["enviro"], median)
     MIC <- findMIC2(ag)
      SMG <- sum(ag$data[ag$enviro>MIC])/length(ag$data[ag$enviro>MIC])
-     SMG2 <- SMG/subset(ag, enviro==0.000125)$data
+     SMG2 <- SMG/subset(ag, enviro==0.0625)$data
      SMG3 <- sum(ag$data[ag$enviro>1])/length(ag$data[ag$enviro>1])
 #     SMG3 <- SMG.b/subset(ag, enviro==1)$data
     c(MIC, SMG, SMG2, SMG3)
@@ -92,7 +92,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
         MIC24 <- findMIC2(ag.24)
         MIC <- findMIC2(ag.48)
         SMG <- sum(ag.48$data[ag.48$enviro>MIC24])/length(ag.48$data[ag.48$enviro>MIC24])
-        SMG2 <- SMG/subset(ag.48, enviro==0.000125)$data
+        SMG2 <- SMG/subset(ag.48, enviro==0.0625)$data
         SMG3 <- sum(ag.48$data[ag.48$enviro>1])/length(ag.48$data[ag.48$enviro>1])
  #       SMG3 <- SMG.b/subset(ag.48, enviro==1)$data
         c(MIC, SMG, SMG2, SMG3)
@@ -104,7 +104,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
           MIC24 <- findMIC2(ag.24)
           MIC <- findMIC2(ag.72)
           SMG <- sum(ag.72$data[ag.72$enviro>MIC24])/length(ag.72$data[ag.72$enviro>MIC24])
-          SMG2 <- SMG/subset(ag.72, enviro==0.000125)$data
+          SMG2 <- SMG/subset(ag.72, enviro==0.0625)$data
           SMG3 <- sum(ag.72$data[ag.72$enviro>1])/length(ag.72$data[ag.72$enviro>1])
  #         SMG3 <- SMG.b/subset(ag.72, enviro==1)$data
           c(MIC, SMG, SMG2, SMG3)
@@ -112,7 +112,7 @@ MICs0 <- lapply(ddn.0lr, function(x){
 
 
 #find MIC for each linerep at 24, 48, 72h
-MICall <- data.frame(name= as.character(names(MICs0)), MIC24 =  matrix(unlist(MICs0),ncol=4,byrow=TRUE)[,1], MIC48 = MICs0.48[1,], MIC72 = MICs0.72[1,], MIC24.10 = matrix(unlist(MICs10),ncol=4,byrow=TRUE)[,1], MIC48.10 = MICs10.48[1,], MIC72.10 = MICs10.72[1,], SMG24 =  matrix(unlist(MICs0),ncol=4,byrow=TRUE)[,2], SMG48 = MICs0.48[2,], SMG72 = MICs0.72[2,], SMG24.10 = matrix(unlist(MICs10),ncol=4,byrow=TRUE)[,2], SMG48.10 = MICs10.48[2,], SMG72.10 = MICs10.72[2,], SMG24.2 =  matrix(unlist(MICs0),ncol=4,byrow=TRUE)[,3], SMG48.2 = MICs0.48[3,], SMG72.2 = MICs0.72[3,], SMG24.10.2 = matrix(unlist(MICs10),ncol=4,byrow=TRUE)[,3], SMG48.10.2 = MICs10.48[3,], SMG72.10.2 = MICs10.72[3,], SMG24.3 =  matrix(unlist(MICs0),ncol=4,byrow=TRUE)[,4], SMG48.3 = MICs0.48[4,], SMG72.3 = MICs0.72[4,], SMG24.10.3 = matrix(unlist(MICs10),ncol=4,byrow=TRUE)[,4], SMG48.10.3 = MICs10.48[4,], SMG72.10.3 = MICs10.72[4,])
+MICall <- data.frame(name= as.character(names(MICs0)), MIC24 =  matrix(unlist(MICs0),ncol=4,byrow=TRUE)[,1], MIC48 = MICs0.48[1,], MIC72 = MICs0.72[1,], MIC24.10 = matrix(unlist(MICs10),ncol=4,byrow=TRUE)[,1], MIC48.10 = MICs10.48[1,], MIC72.10 = MICs10.72[1,], SMG24 =  matrix(unlist(MICs0),ncol=4,byrow=TRUE)[,3], SMG48 = MICs0.48[3,], SMG72 = MICs0.72[3,], SMG24.10 = matrix(unlist(MICs10),ncol=4,byrow=TRUE)[,3], SMG48.10 = MICs10.48[3,], SMG72.10 = MICs10.72[3,])
 MICall$name <- as.character(MICall$name)
 MICall$line <- unlist(lapply(MICall$name, function(x) strsplit(x, "_")[[1]][1]))
 MICall$rep <- unlist(lapply(MICall$name, function(x) strsplit(x, "_")[[1]][2]))
@@ -121,9 +121,23 @@ MICall <- MICall[order(factor(MICall$line, 1:20), factor(MICall$rep, 1:12)),]
 MICall$change24 <- MICall$MIC24.10 - MICall$MIC24
 MICall$change48 <- MICall$MIC48.10 - MICall$MIC48
 MICall$change72 <- MICall$MIC72.10 - MICall$MIC72
-MICall.ag <- aggregate(MICall[c("MIC24", "MIC48", "MIC72", "MIC24.10", "MIC48.10", "MIC72.10", "change24", "change48", "change72", "SMG24", "SMG48", "SMG72", "SMG24.10", "SMG48.10", "SMG72.10", "SMG24.2", "SMG48.2", "SMG72.2", "SMG24.10.2", "SMG48.10.2", "SMG72.10.2", "SMG24.3", "SMG48.3", "SMG72.3", "SMG24.10.3", "SMG48.10.3", "SMG72.10.3")], MICall[c("line")], median, na.rm=TRUE)
+MICall.ag <- aggregate(MICall[c("MIC24", "MIC48", "MIC72", "MIC24.10", "MIC48.10", "MIC72.10", "change24", "change48", "change72", "SMG24", "SMG48", "SMG72", "SMG24.10", "SMG48.10", "SMG72.10")], MICall[c("line")], median, na.rm=TRUE)
 
 MICall.ag <- MICall.ag[order(factor(MICall.ag$line, 1:20)),]
 
 write.csv(MICall, "tables_intermediate/MIC_all_rep.csv", row.names=FALSE)
 write.csv(MICall.ag, "tables_intermediate/MIC_ag.csv", row.names=FALSE)
+
+a12.0 <-subset(all0, line==12)
+a12.0 <- aggregate(a12.0["data"], a12.0[c("enviro", "rep")], median)
+
+a12.10 <-subset(all10, line==12)
+a12.10 <- a12.10[order(a12.10$rep, a12.10$enviro),]
+a12.10 <- aggregate(a12.10["dataM"], a12.10[c("enviro", "rep")], median)
+
+a20.10 <-subset(all10, line==20)
+a20.10 <- a20.10[order(a20.10$rep, a20.10$enviro),]
+a20.10 <- aggregate(a20.10["dataM"], a20.10[c("enviro", "rep")], median)
+
+a20.0 <-subset(all0, line==20)
+a20.0 <- aggregate(a20.0["data"], a20.0[c("enviro", "rep")], median)
