@@ -93,10 +93,10 @@ system("open manuscript/figures/Figure2-OD1cor-mean_SD.pdf")
 # Figure 3
 ####################
 
-fitFlow.ag$MIC24[fitFlow.ag$MIC24==0.000125] <- 0.25
-fitFlow.ag$MIC24.10[fitFlow.ag$MIC24.10==0.000125] <- 0.25
-fitFlow$MIC24[fitFlow$MIC24==0.000125] <- 0.25
-fitFlow$MIC24.10[fitFlow$MIC24.10==0.000125] <- 0.25
+fitFlow.ag$MIC24[fitFlow.ag$MIC24==0.0625] <- 0.25
+fitFlow.ag$MIC24.10[fitFlow.ag$MIC24.10==0.0625] <- 0.25
+fitFlow$MIC24[fitFlow$MIC24==0.0625] <- 0.25
+fitFlow$MIC24.10[fitFlow$MIC24.10==0.0625] <- 0.25
 #subset(fitFlow, MIC24.10 > 64) #1 line in A5, 5 in A12
 fitFlow$MIC24.10[fitFlow$MIC24.10 > 64] <- 256
 
@@ -143,6 +143,52 @@ axis(1, c(2, 4, 6, 8, 10, 14, 16, 19, 21) , labels=c(paste0("A", c(MIC24.ag.less
 dev.off()
 system("open manuscript/figures/Figure3a-BMD_resist.pdf")
 
+########################
+#Figure S1 - MIC traces
+########################
+incMIC <- subset(fitFlow, MIC24.10 > MIC24 & MIC24.10 > 1)
+incMIC$lr <- paste(incMIC$line, incMIC$rep, sep="_")
+#incMIC <- c("2_7", "3_3", "3_5", "3_7", "3_12", "5_3", "5_10", "5_12", "7_7", "8_5", "8_6", "8_8", "17_2", "19_8", "19_9")
+MICdec <- subset(fitFlow, change24 < 0)
+MICdec$lr <- paste(MICdec$line, MICdec$rep, sep  = "_")
+decMIC <- MICdec$lr
+all10$lr <- paste(all10$line, all10$rep, sep  = "_")
+all10$col <- "grey"
+all10$col[all10$lr %in% decMIC] <- "red"
+all10$col[all10$lr %in% incMIC$lr] <- "blue"
+all10$lwd <- 0.5
+all10$lwd[all10$lr %in% incMIC$lr] <- 3
+all10$lwd[all10$lr %in% decMIC] <- 3
+all10 <- subset(all10, enviro < 512)
+
+par(mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(3, 4, 1, 1))
+for(i in 1:20){
+  sub_t0 <- subset(all0, line == i)
+  sub_t0_ag <- aggregate(sub_t0["data"], sub_t0[c("enviro")], median)
+  sub <- subset(all10, line == i)
+  sub$enviro[sub$enviro == 0] <- 0.0625
+  sub_ag <-  aggregate(sub["dataM"], sub[c("enviro", "rep", "lr", "col", "lwd")], median)
+  sub_ag1 <- subset(sub_ag, rep == 1)
+  plot(log(sub_ag1$enviro), sub_ag1$dataM, type="l", yaxt="n", xaxt="n", ylim=c(0, 2), lwd=0.5, col="grey")
+  abline(v=log(1), col="grey", lwd=2)
+  for (k in 1:12){
+    sub_ag_sub <- subset(sub_ag, rep == k)
+    points(log(sub_ag_sub$enviro), sub_ag_sub$dataM, type="l", col= sub_ag_sub$col, lwd = sub_ag_sub$lwd)
+    #points(log(sub_ag_sub$enviro), sub_ag_sub$dataM, type="l", col= ifelse(sub_ag_sub$lr[1] %in% outliers, "black", "black"), lwd = ifelse(sub_ag_sub$lr[1] %in% outliers, 3, 0.5))
+  }
+  points(log(sub_t0_ag$enviro), sub_t0_ag$data, type="l", lwd=3, col="black")
+  if(i %% 4 ==1) axis(2, las=2)
+  else axis(2, labels=FALSE)
+  if (i > 16) axis(1, at = log(c(0.0625, 0.25, 1, 4, 16, 64)), labels=c("0", "0.25", "1", "4", "16", "64"))
+  else axis(1, at = log(c(0.0625, 0.25, 1, 4, 16, 64)), labels=FALSE)
+
+  #abline(h=subset(sub_t0_ag, enviro=="0.0625")$data/2, col="blue")
+  mtext(paste0("A", sub$line[1]), side=3, adj=0.01)
+}
+mtext(expression("Fluconazole concentration ("~mu~"g)"), side=1, line=1.5, outer=TRUE)
+#mtext("Fluconazole concentration (ug)", side=1, outer=TRUE, line=2)
+mtext("Optical density (24 h)", side=2, outer=TRUE, line=2)
+
 #################################
 #Tolerance above 1ug
 #################################
@@ -165,33 +211,33 @@ table(MIC24.more1_1$line)
 fitFlow$place72_MIC <- c(rep(16, 12), rep(12, 12), rep(3, 12), rep(10, 12), rep(17, 12), rep(13, 12), rep(14, 12), rep(11, 12), rep(4, 12), rep(15, 12), rep(2, 12), rep(20, 12), rep(6, 12), rep(5, 12), rep(7, 12), rep(9, 12), rep(1, 12), rep(18, 12), rep(8, 12), rep(19, 12))
 
 ############################################################
-# Figure S1 - Tolerance at different time points
+# Figure S2 - Tolerance at different time points
 ############################################################
-pdf("manuscript/figures/FigureS1-tolerance-aboveMIC.pdf", width=7, height=6.5)
+pdf("manuscript/figures/FigureS2-tolerance-aboveMIC.pdf", width=7, height=6.5)
 par(mfrow=c(3, 1), mar=c(1, 1, 1, 1), oma=c(3, 4, 1, 1), mgp=c(1.5, 0.75, 0))
-beeswarm(SMG24.10.2~place72_MIC, data = fitFlow, ylim=c(0, 1), yaxt="n", xaxt="n", xlab="strain", ylab="", pch=19, cex=1.2, col=coloursVa, corral="wrap", xlim=c(1, 20))
+beeswarm(SMG24.10~place72_MIC, data = fitFlow, ylim=c(0, 1), yaxt="n", xaxt="n", xlab="strain", ylab="", pch=19, cex=1.2, col=coloursVa, corral="wrap", xlim=c(1, 20))
 #points(1:20, fitFlow.ag$SMG24.2[place72], pch="-", cex=2.25, col=grey(0.2))
-points(1:20, SMG24.up.2[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
-points(1:20, SMG24.down.2[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
-arrows(1:20, SMG24.up.2[order72_MIC], 1:20, SMG24.down.2[order72_MIC], col=grey(0.2), length=0)
+points(1:20, SMG24.up[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
+points(1:20, SMG24.down[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
+arrows(1:20, SMG24.up[order72_MIC], 1:20, SMG24.down.2[order72_MIC], col=grey(0.2), length=0)
 axis(2, las=2)
 axis(1, 1:20, labels=FALSE, cex.axis=0.5)
 mtext("a 24 h" , side=3, adj=0.01, font=2, cex=1)
 
-beeswarm(SMG48.10.2~place72_MIC, data = fitFlow, ylim=c(0, 1), yaxt="n", xaxt="n", xlab="strain", ylab="", pch=19, cex=1.2, col=coloursVa, corral="wrap")
+beeswarm(SMG48.10~place72_MIC, data = fitFlow, ylim=c(0, 1), yaxt="n", xaxt="n", xlab="strain", ylab="", pch=19, cex=1.2, col=coloursVa, corral="wrap")
 #points(1:20, fitFlow.ag$SMG48.2[place72], pch="-", cex=2.25, col=grey(0.2))
-points(1:20, SMG48.up.2[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
-points(1:20, SMG48.down.2[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
-arrows(1:20, SMG48.up.2[order72_MIC], 1:20, SMG48.down.2[order72_MIC], col=grey(0.2), length=0)
+points(1:20, SMG48.up[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
+points(1:20, SMG48.down[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
+arrows(1:20, SMG48.up[order72_MIC], 1:20, SMG48.down[order72_MIC], col=grey(0.2), length=0)
 axis(2, las=2)
 axis(1, 1:20, labels=FALSE, cex.axis=0.5)
 mtext("b 48 h" , side=3, adj=0.01, font=2, cex=1)
 
-beeswarm(SMG72.10.2~place72_MIC, data = fitFlow, ylim=c(0, 1), yaxt="n", xaxt="n", xlab="strain", ylab="", pch=19, cex=1.2, col=coloursVa, corral="wrap")
+beeswarm(SMG72.10~place72_MIC, data = fitFlow, ylim=c(0, 1), yaxt="n", xaxt="n", xlab="strain", ylab="", pch=19, cex=1.2, col=coloursVa, corral="wrap")
 #points(1:20, fitFlow.ag$SMG72.2[place72], pch="-", cex=2.25, col=grey(0.2))
-points(1:20, SMG72.up.2[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
-points(1:20, SMG72.down.2[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
-arrows(1:20, SMG72.up.2[order72_MIC], 1:20, SMG72.down.2[order72_MIC], col=grey(0.2), length=0)
+points(1:20, SMG72.up[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
+points(1:20, SMG72.down[order72_MIC], pch="-", cex=2.25, col=grey(0.2))
+arrows(1:20, SMG72.up[order72_MIC], 1:20, SMG72.down[order72_MIC], col=grey(0.2), length=0)
 
 axis(2, las=2)
 axis(1, 1:20, labels=FALSE, cex.axis=0.5)
@@ -201,7 +247,7 @@ axis(1, seq(1, 20, 2), paste0("A", all0.ag.1$line[as.numeric(order72_MIC)][seq(1
 axis(1, seq(2, 20, 2), paste0("A", all0.ag.1$line[as.numeric(order72_MIC)][seq(2, 20, 2)]), cex.axis=0.9)
 #text(1:20, -0.15, paste0("A", fitFlow.plot.ag$line[place]), srt=-45, adj=0.1, xpd=NA)
 dev.off()
-system("open manuscript/figures/FigureS1-tolerance-aboveMIC.pdf")
+system("open manuscript/figures/FigureS2-tolerance-aboveMIC.pdf")
 ############################################################
 #Figure 3b
 #JUST strains with MIC = 1
@@ -233,23 +279,23 @@ system("open manuscript/figures/Figure3b-SMG72-aboveMIC-flip_MIC24-1.pdf")
 ######################################################################
 #Figure S2: Change in evolved tolerance versus change in evolved fitness
 ######################################################################
-pdf("manuscript/figures/FigureS2-DeltaEvolFit_72h-DeltaEvolSMG.pdf", width=7, height=5)
+pdf("manuscript/figures/FigureS3-DeltaEvolFit_72h-DeltaEvolSMG.pdf", width=7, height=5)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
 for(i in c(order72_MIC[1:20])){
   k <- k+1
-  plot(subset(fitFlow, line==i)$delta1.72, subset(fitFlow, line==i)$change72.SMG.2, xlim=c(-0.1, 1.5), ylim=c(-1, 1), xaxt="n", yaxt="n", pch=21, bg=ifelse(subset(fitFlow, line ==i)$MIC24.10 ==1 , "blue", "white"))
-  t <- cor.test(subset(fitFlow, line==i)$delta1.72, subset(fitFlow, line==i)$change72.SMG.2, method="spearman")
+  plot(subset(fitFlow, line==i)$delta1.72, subset(fitFlow, line==i)$change72.SMG, xlim=c(-0.1, 1.5), ylim=c(-1, 1), xaxt="n", yaxt="n", pch=21, bg=ifelse(subset(fitFlow, line ==i)$MIC24.10 ==1 , "blue", "white"))
+  t <- cor.test(subset(fitFlow, line==i)$delta1.72, subset(fitFlow, line==i)$change72.SMG, method="spearman")
   if(!is.na(t$p.value)){
-    if(t$p.value < 0.05) abline(lm(subset(fitFlow, line==i)$change72.SMG.2~subset(fitFlow, line==i)$delta1.72), col="black")
-    if(t$p.value > 0.05) abline(lm(subset(fitFlow, line==i)$change72.SMG.2~subset(fitFlow, line==i)$delta1.72), col="black", lty=2)
+    if(t$p.value < 0.05) abline(lm(subset(fitFlow, line==i)$change72.SMG~subset(fitFlow, line==i)$delta1.72), col="black")
+    if(t$p.value > 0.05) abline(lm(subset(fitFlow, line==i)$change72.SMG~subset(fitFlow, line==i)$delta1.72), col="black", lty=2)
   }
   if(length(subset(fitFlow, MIC24.10 == 1 & line==i)$all10.1.72) > 0){
     if(i == 1) print(length(subset(fitFlow, MIC24.10 == 1 & line==i)$all10.1.72) > 0)
-    t2 <- cor.test(subset(fitFlow, MIC24.10 == 1 & line==i)$delta1.72, subset(fitFlow, MIC24.10 == 1 & line==i)$change72.SMG.2, method="spearman")
+    t2 <- cor.test(subset(fitFlow, MIC24.10 == 1 & line==i)$delta1.72, subset(fitFlow, MIC24.10 == 1 & line==i)$change72.SMG, method="spearman")
     if(!is.na(t2$p.value)){
-      if(t2$p.value < 0.05) abline(lm(subset(fitFlow, MIC24.10 == 1 & line==i)$change72.SMG.2~subset(fitFlow, MIC24.10 == 1 & line==i)$delta1.72), col="blue")
-      if(t2$p.value > 0.05) abline(lm(subset(fitFlow, MIC24.10 == 1 & line==i)$change72.SMG.2~subset(fitFlow, MIC24.10 == 1 & line==i)$delta1.72), col="blue", lty=2)
+      if(t2$p.value < 0.05) abline(lm(subset(fitFlow, MIC24.10 == 1 & line==i)$change72.SMG~subset(fitFlow, MIC24.10 == 1 & line==i)$delta1.72), col="blue")
+      if(t2$p.value > 0.05) abline(lm(subset(fitFlow, MIC24.10 == 1 & line==i)$change72.SMG~subset(fitFlow, MIC24.10 == 1 & line==i)$delta1.72), col="blue", lty=2)
     }
   }
   if(k > 16) axis(1)
@@ -301,9 +347,9 @@ system("open manuscript/figures/Figure4ab-genomeSize.pdf")
 #################################
 
 #################################
-#Figure S3
+#Figure S4
 #################################
-pdf("manuscript/figures/FigureS3-deltaFit72-evolPloidy.pdf", width=7, height=6)
+pdf("manuscript/figures/FigureS4-deltaFit72-evolPloidy.pdf", width=7, height=6)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
 for(i in c(order72_MIC[1:20])){
@@ -483,34 +529,7 @@ system("open manuscript/figures/FigureS4-deltaSMG-evolPloidy.pdf")
 # system("open manuscript/figures/FigureSx-ancOD1_cor_SMG-mean-SD.pdf")
 
 
-####
-outliers <- c("2_7", "3_3", "3_5", "3_7", "3_12", "5_3", "5_10", "5_12", "7_7", "8_5", "8_6", "8_8", "17_2", "19_8", "19_9")
-par(mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(3, 4, 1, 1))
-for(i in 1:20){
-  sub_t0 <- subset(all0, line == i)
-  sub_t0$enviro[sub_t0$enviro == 0.000125] <- 0.0625
-  sub_t0_ag <- aggregate(sub_t0["data"], sub_t0[c("enviro")], median)
-  sub <- subset(all10, line == i)
-  sub$enviro[sub$enviro == 0.000125] <- 0.0625
-  sub_ag <-  aggregate(sub["dataM"], sub[c("enviro", "rep", "lr")], median)
-  sub_ag1 <- subset(sub_ag, rep == 1)
-  plot(log(sub_ag1$enviro), sub_ag1$dataM, type="l", yaxt="n", xaxt="n", ylim=c(0, 2), lwd=0.5, col="grey")
-  abline(v=log(1), col="grey", lwd=2)
-  for (k in 1:12){
-    sub_ag_sub <- subset(sub_ag, rep == k)
-    points(log(sub_ag_sub$enviro), sub_ag_sub$dataM, type="l", col= ifelse(sub_ag_sub$lr[1] %in% outliers, "black", "black"), lwd = ifelse(sub_ag_sub$lr[1] %in% outliers, 3, 0.5))
-  }
-  points(log(sub_t0_ag$enviro), sub_t0_ag$data, type="l", lwd=3, col="red")
-  if(i %% 4 ==1) axis(2, las=2)
-  else axis(2, labels=FALSE)
-  if (i > 16) axis(1, at = log(c(0.0625, 0.25, 1, 4, 16, 64)), labels=c("0", "0.25", "1", "4", "16", "64"))
-  else axis(1, at = log(c(0.0625, 0.25, 1, 4, 16, 64)), labels=FALSE)
 
-  #abline(h=subset(sub_t0_ag, enviro=="0.0625")$data/2, col="blue")
-  mtext(paste0("A", sub$line[1]), side=3, adj=0.01)
-}
-  mtext("Fluconazole concentration (ug)", side=1, outer=TRUE, line=2)
-  mtext("Optical density (24 h)", side=2, outer=TRUE, line=2)
 
 # so if MIC at no drug drops then can tehnically see an increase in MIC with similar OD at higher levels of drug compared to the ancestor
 # Really hard to read MIC from ETest when there is a lot of background growth - A3! A5!

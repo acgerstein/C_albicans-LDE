@@ -30,6 +30,11 @@ all10 <- filter(all10, enviro!= 512)
 all10.48 <- filter(all10.48, enviro!= 512)
 all10.72 <- filter(all10.72, enviro!= 512)
 
+all10.12 <- filter(all10, line == 12)
+all10.12 <- filter(all10, enviro != 4)
+all10.oth <- filter(all10, line != 12)
+all10 <- rbind(all10.oth, all10.12)
+
 
 #split by linerep
 ddn.0lr <- split(all0, all0$lr)

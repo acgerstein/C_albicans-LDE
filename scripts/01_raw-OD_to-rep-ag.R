@@ -11,7 +11,7 @@ se <- function(x) sqrt(var(x)/(length(x) - 1))
 #gen = t0a and t10 from MA4, gen = t0, t3, t13 from MA5
 #######################################
 ##############################
-#LIQUID ASSAY MA4a - evolved in 1ug
+#LIQUID ASSAY MA4a - evolved in 1ug, assayed 0, 1, 4, 8, 32
 ##############################
 ma4.24 <- read.csv("data_in/MIC/raw/OD_MA4_24h_df.csv", sep=",", as.is=TRUE)
 ma4.24.0 <- subset(ma4.24, gen== "t0")
@@ -32,7 +32,7 @@ ma4b.72$enviro[ma4b.72$enviro==1.1] <- 1
 ma4b.72.0 <- subset(ma4b.72, gen== "t0")
 
 ##############################
-#LIQUID ASSAY MA5 - evolved in 8ug
+#LIQUID ASSAY MA5 - evolved in 8ug, assayed 0, 1, 4, 8, 32
 ##############################
 ma5.24 <- read.csv("data_in/MIC/raw/OD_MA5_24h_df.csv", sep=",", as.is=TRUE)
 ma5.24.0 <- subset(ma5.24, gen== "t0")
@@ -44,8 +44,9 @@ ma5.72.0 <- subset(ma5.72, gen== "t0")
 ma5.rep.24 <- summarise(group_by(ma5.24, line, rep, enviro, gen), data=mean(data), sd=sd(data), se=se(data))
 ma5.rep.48 <- summarise(group_by(ma5.48, line, rep, enviro, gen), data=mean(data), sd=sd(data), se=se(data))
 ma5.rep.72 <- summarise(group_by(ma5.72, line, rep, enviro, gen), data=mean(data), sd=sd(data), se=se(data))
+
 ############################################################
-#LIQUID ASSAY MA6- evolved in 32ug
+#LIQUID ASSAY MA6- evolved in 32ug, assayed 0, 8, 32, 128
 ############################################################
 ma6.24 <- read.csv("data_in/MIC/raw/OD_MA6_24h_df.csv", sep=",", as.is=TRUE)
 ma6.24.0 <- subset(ma6.24, gen=="t0c")
@@ -55,7 +56,7 @@ ma6.72 <- read.csv("data_in/MIC/raw/OD_MA6_72h_df.csv", sep=",", as.is=TRUE)
 ma6.72.0 <- subset(ma6.72, gen=="t0c")
 
 ############################################################
-#LIQUID ASSAY MA7- evolved in 128ug
+#LIQUID ASSAY MA7- evolved in 128ug, assayed  0, 32, 128, 512
 ############################################################
 ma7.24 <- read.csv("data_in/MIC/raw/OD_MA7_24h_df.csv", sep=",", as.is=TRUE)
 ma7.24.0 <- subset(ma7.24, gen=="t0b")
@@ -218,7 +219,7 @@ ma4.10.rep <- ma4.24 %>%
 names(ma4.10.rep)[2] <-"rep"
 ma4.10.rep <- data.frame(ma4.10.rep)
 
-ma4b.10.rep <- ma4b.24 %>%
+ma4b.10.rep <- f %>%
 	filter(gen=="t10") %>%
 		group_by(line, col, enviro) %>%
 			summarise(dataM = mean(data))
