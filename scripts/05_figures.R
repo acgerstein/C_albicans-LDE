@@ -222,7 +222,6 @@ table(MIC24.less1_1$line)
 table(MIC24.1_1$line)
 table(MIC24.more1_1$line)
 
-fitFlow$place72_MIC <- c(rep(16, 12), rep(12, 12), rep(3, 12), rep(10, 12), rep(17, 12), rep(13, 12), rep(14, 12), rep(11, 12), rep(4, 12), rep(15, 12), rep(2, 12), rep(20, 12), rep(6, 12), rep(5, 12), rep(7, 12), rep(9, 12), rep(1, 12), rep(18, 12), rep(8, 12), rep(19, 12))
 
 ############################################################
 # Figure S2 - Tolerance at different time points
@@ -309,14 +308,14 @@ system("open manuscript/figures/FigureS3-MICTraces_72h.pdf")
 
 ############################################################
 #Figure 3b
-#JUST strains with MIC = 1
+#tolerance by replicate
 ############################################################
 table(MIC24.less1$strain)
 table(MIC24.1$strain)
 table(MIC24.more1$strain)
 pdf("manuscript/figures/Figure3b-SMG72-aboveMIC-flip.pdf", width=7.5, height=4.5)
 plot(rep(1:12, each = 12), MIC24.less1$SMG72.10, yaxt="n", xaxt="n", xlab="Strain", ylab="", cex=1.2, pch=19, xlim=c(1, 22), col = MIC24.less1$col72a, ylim=c(0,1))
-points(MIC24.1$place72_MIC+1, MIC24.1$SMG72.10, cex=1.2, col=MIC24.1$col72a, pch=19)
+points(MIC24.1$place72_MIC+2, MIC24.1$SMG72.10, cex=1.2, col=MIC24.1$col72a, pch=19)
 points(MIC24.more1$place72_MIC+2, MIC24.more1$SMG72.10, cex=1.2, col=MIC24.more1$col72a, pch=19)
 abline(v=13, lty=2)
 abline(v=17, lty=2)
