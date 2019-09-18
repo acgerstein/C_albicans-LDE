@@ -142,76 +142,113 @@ cor.test(fitFlow.ag$delta1.72, fitFlow.sd$all10.ag.1.72, paired=TRUE, method="sp
 #################################
 # After ~100 generations of evolution at a low level of fluconazole, only 18 replicates from seven strain backgrounds increased in MIC beyond 1ug/mL measured through a broth microdilution assay (BMD). In most of these replicates, MIC increased only slightly, to 4 ug/mL (five replicates from strain A3, four replicates from A8, and one replicate from A4 and A7). Clinical resistance (MIC >= 8 at 24 hours, Fothergill 2014) was acquired in only eight replicates, six from strain A5 (which had an initial MIC of 4), and one replicate each from strains A17 and A19, two backgrounds with a very low initial MIC (Figure 1A).
 
-nrow(subset(fitFlow, MIC24 < 1)) #132
-MICto1 <- subset(fitFlow, MIC24 < 1 & MIC24.10 == 1) #97 of 132 reps increased to 1, 12 increased above 1
-MICinc1 <- subset(fitFlow, MIC24 <= 1 & MIC24.10 > 1) #14
-MICinc8 <- subset(fitFlow, MIC24 <= 8 & MIC24.10 >= 8) #11
+nrow(subset(fitFlow, MIC24 < 1)) #144
+nrow(subset(fitFlow, MIC24 < 1 & MIC24.10 == 1)) #110 of 144 reps increased to 1,
+nrow(subset(fitFlow, MIC24 < 1 & MIC24.10 > 1)) #6 increased above 1
+nrow(subset(fitFlow, MIC24 == 1 & MIC24.10 > 1)) #0
+nrow(subset(fitFlow, MIC24 == 1 & MIC24.10 < 1)) #0
 
-nrow(subset(fitFlow, MIC24 == 1 & MIC24.10 > 1)) #2
-nrow(subset(fitFlow, MIC24 == 1 & MIC24.10 < 1)) #4
-nrow(subset(fitFlow, MIC24 > 1 & MIC24.10 == 1)) #14  A5, A20
-nrow(subset(fitFlow, MIC24 > 1 & change24 > 1)) #18 A5, A12
+nrow(subset(fitFlow, MIC24 > 1 & MIC24.10 == 1)) #16  A5, A20
+nrow(subset(fitFlow, MIC24 > 1 & change24 > 1)) #4 A5
 
- # Interestingly, the MIC of some replicates from initially-high MIC strains actually decreased to 1ug/mL  (two replicates from A5, eight replicates from A12, all 12 replicates from A20).
+subset(fitFlow, change24 > 1)
+
+ # Interestingly, the MIC of some replicates from initially-high MIC strains actually decreased to 1ug/mL  (two replicates from A5, all 12 replicates from A20).
 
 
 nrow(subset(fitFlow, change24 > 1)) #32
 MICdec <- subset(fitFlow, change24 < 0)
 
 #SMG all replicates - this is using the range of ancestral values as the limits for up/down in evolved relicates
-SMG24up <- subset(fitFlow, SMG24.10 > rep(SMG24.up, each=12)) #110
-SMG24down <- subset(fitFlow, SMG24.10 < rep(SMG24.down, each=12)) #52
-SMG48up <- subset(fitFlow, SMG48.10 > rep(SMG48.up, each=12)) #68
-SMG48down <- subset(fitFlow, SMG48.10 < rep(SMG48.down, each=12)) #91
-SMG72up <- subset(fitFlow, SMG72.10 > rep(SMG72.up, each=12)) #74
-SMG72down <- subset(fitFlow, SMG72.10 < rep(SMG72.down, each=12)) #88
+SMG24up <- subset(fitFlow, SMG24.10 > rep(SMG24.up, each=12)) #79
+SMG24down <- subset(fitFlow, SMG24.10 < rep(SMG24.down, each=12)) #66
+SMG48up <- subset(fitFlow, SMG48.10 > rep(SMG48.up, each=12)) #47
+SMG48down <- subset(fitFlow, SMG48.10 < rep(SMG48.down, each=12)) #118
+SMG72up <- subset(fitFlow, SMG72.10 > rep(SMG72.up, each=12)) #55
+SMG72down <- subset(fitFlow, SMG72.10 < rep(SMG72.down, each=12)) #112
 
-SMG72up.MIC1 <- subset(fitFlow, SMG72.10 > rep(SMG72.up, each=12) & MIC24.10 == 1) #36 in  13 strains (3, 12 unique)
-SMG72down.MIC1 <- subset(fitFlow, SMG72.10 < rep(SMG72.down, each=12) & MIC24.10 == 1) #70 in 15  strains (14, 16, 8 unique)
-# A1, A12 & A18 had no replicates MIC=1, A5 started with very high tolerance and did not change
+SMG72up.strains <- subset(fitFlow, SMG72.10 > rep(SMG72.up, each=12)) #55
+length(unique(SMG72up.strains$strain)) #15
+SMG72down.strains <- subset(fitFlow, SMG72.10 < rep(SMG72.down, each=12)) #122
+length(unique(SMG72down.strains$strain)) #19
 
-table(SMG72up.MIC1$strain)
-# 10 11 13 15 17 19  2 20  3  4  6  7  9
-# 3  2  3  1  1  2  2  5  5  3  3  5  1
+# SMG72up.MIC1 <- subset(fitFlow, SMG72.10 > rep(SMG72.up, each=12) & MIC24.10 == 1) #29 in  14 strains (3, 12 unique)
+# SMG72down.MIC1 <- subset(fitFlow, SMG72.10 < rep(SMG72.down, each=12) & MIC24.10 == 1) #93 in 15  strains (14, 16, 8 unique)
+# # A1, A12 & A18 had no replicates MIC=1, A5 started with very high tolerance and did not change
+#
+# table(SMG72up.MIC1$strain)
+# # 10 11 13 15 17 19  2 20  3  4  6  7  8  9
+# # 2  2  1  1  1  2  1  4  5  3  1  4  1  1
+#
+# table(SMG72down.MIC1$strain)
+# # 10 11 13 14 15 16 17 19  2 20  4  6  7  8  9
+# # 4  1  9 10  8 12  9  4  5  5  7  7  4  4  4
 
-table(SMG72down.MIC1$strain)
-# 10 11 13 14 15 16 17 19  2 20  4  6  7  8  9
-# 3  1  6  9  8  9  6  1  4  3  7  3  1  5  4
+cor.test(fitFlow.ag$SMG72, fitFlow.ag$MIC24, method="spearman")
+#S = 1141.8, p-value = 0.5518
+cor.test(fitFlow.ag$SMG72.10, fitFlow.ag$MIC24.10, method="spearman")
+#S = 1205.2, p-value = 0.694
+cor.test(fitFlow.sd$SMG72.10, fitFlow.ag$all0.1, method="spearman")
+#S = 2226, p-value = 0.001508
+#rho = -0.67
+cor.test(fitFlow.sd$SMG72.10, fitFlow.ag$all0.1.72, method="spearman")
+#S = 1986, p-value = 0.02866
+# rho = -0.49
+cor.test(fitFlow.sd$SMG72.10, fitFlow.sd$all10.1, method="spearman")
+#S = 450, p-value = 0.001941, rho = 0.66
+cor.test(fitFlow.sd$SMG72.10, fitFlow.sd$all10.1.72, method="spearman")
+#S = 658, p-value = 0.02458, rho = 0.51
 
-# cor.test(fitFlow.ag$SMG72, fitFlow.ag$MIC24, method="spearman")
-# #S = 1068.8, p-value = 0.4066
-# cor.test(fitFlow.ag$SMG72.10, fitFlow.ag$MIC24, method="spearman")
-# #S = 1082.5, p-value = 0.4322
-# cor.test(fitFlow.ag$SMG72.10, fitFlow.ag$MIC24.10, method="spearman")
-# #S = 1018.3, p-value = 0.3199
+plot(fitFlow.sd$SMG72.10, fitFlow.ag$all0.1)
+plot(fitFlow.sd$SMG72.10, fitFlow.ag$all0.1.72)
+cor.test(fitFlow_MIC1.sd$SMG72.10, fitFlow_MIC1.ag$all0.1)
+plot(fitFlow_MIC1.sd$SMG72.10, fitFlow_MIC1.ag$all0.1.72)
 
-fitFlow_MIC1 <- subset(fitFlow, MIC24.10 == 1)
-fitFlow_MIC1$clade <- as.factor(fitFlow_MIC1$clade)
-fitFlow_MIC1.ag <- aggregate(fitFlow_MIC1[c("change72.SMG", "delta1.72", "all10.1.72", "all0.1.72")], fitFlow_MIC1[c("line", "clade", "zygosity", "col72")], mean)
-
-fitFlow_MIC1.sd <- aggregate(fitFlow_MIC1[c("change72.SMG", "delta1.72", "all10.1.72", "all0.1.72")], fitFlow_MIC1[c("line", "clade", "zygosity", "col72")], sd)
+# fitFlow_MIC1 <- subset(fitFlow, MIC24.10 == 1)
+# fitFlow_MIC1$clade <- as.factor(fitFlow_MIC1$clade)
+# fitFlow_MIC1.ag <- aggregate(fitFlow_MIC1[c("MIC24", "MIC24.10", "all0.1","all0.1.72", "all10.1", "all10.1.72", "delta1.72", "SMG72", "SMG72.10", "change72.SMG")], fitFlow_MIC1[c("line", "clade", "zygosity", "col72")], mean)
+# fitFlow_MIC1.ag <- fitFlow_MIC1.ag[order(as.numeric(fitFlow_MIC1.ag$line)),]
+#
+# fitFlow_MIC1.sd <- aggregate(fitFlow_MIC1[c("MIC24","MIC24.10", "all0.1","all0.1.72", "all10.1", "all10.1.72", "delta1.72", "SMG72", "SMG72.10", "change72.SMG")], fitFlow_MIC1[c("line", "clade", "zygosity", "col72")], sd)
+# fitFlow_MIC1.sd <- fitFlow_MIC1.sd[order(as.numeric(fitFlow_MIC1.sd$line)),]
+#
+# cor.test(fitFlow_MIC1.ag$SMG72, fitFlow_MIC1.ag$MIC24, method="spearman")
+# #S = 796.88, p-value = 0.9289
+# cor.test(fitFlow_MIC1.ag$SMG72.10, fitFlow_MIC1.ag$MIC24.10, method="spearman")
+# # MIC are all 1. Duh,
+# cor.test(fitFlow_MIC1.sd$SMG72.10, fitFlow_MIC1.ag$all0.1, method="spearman")
+# #S = 1192, p-value = 0.06454
+# #rho = -0.46
+# cor.test(fitFlow_MIC1.sd$SMG72.10, fitFlow_MIC1.ag$all0.1.72, method="spearman")
+# #S = 996, p-value = 0.3934
+# # rho = -0.22
+#
+#
+# cor.test(fitFlow_MIC1.sd$SMG72.10, fitFlow_MIC1.sd$all10.1, method="spearman")
+# #S = 738, p-value = 0.7155
+# cor.test(fitFlow_MIC1.sd$SMG72.10, fitFlow_MIC1.sd$all10.1.72, method="spearman")
+# #S = 546, p-value = 0.1944
 
 #Full model
-SMGevol.lmer <- lmer(change72.SMG~ delta1.72 + zygosity+as.factor(clade)+ (1|strain), data=fitFlow_MIC1, REML = FALSE)
-anova(SMGevol.lmer, type = 3)
+# SMGevol.lmer <- lmer(change72.SMG~ delta1.72 + zygosity+as.factor(clade)+ (1|strain), data=fitFlow_MIC1, REML = FALSE)
+# anova(SMGevol.lmer, type = 3)
+# # Type III Analysis of Variance Table with Satterthwaite's method
+# #                   Sum Sq  Mean Sq NumDF  DenDF F value  Pr(>F)
+# # delta1.72        0.07038 0.070382     1 48.850  2.6657 0.10897
+# # zygosity         0.14625 0.146255     1 12.477  5.5393 0.03574 *
+# # as.factor(clade) 0.46026 0.115065     4 12.477  4.3580 0.01984 *
+# summary(SMGevol.lmer)
+
+SMGevol.lmer_all <- lmer(change72.SMG~ delta1.72 + zygosity+as.factor(clade)+ (1|strain), data=fitFlow, REML = FALSE)
+anova(SMGevol.lmer_all, type = 3)
 # Type III Analysis of Variance Table with Satterthwaite's method
-#                   Sum Sq  Mean Sq NumDF  DenDF F value  Pr(>F)
-# delta1.72        0.09052 0.090522     1 52.771  3.3539 0.07269 .
-# zygosity         0.13071 0.130714     1 12.767  4.8430 0.04680 *
-# as.factor(clade) 0.45428 0.113569     4 12.959  4.2078 0.02119 *
-# ---
-# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-summary(SMGevol.lmer)
+#                    Sum Sq  Mean Sq NumDF   DenDF F value Pr(>F)
+# delta1.72        0.000710 0.000710     1 132.478  0.0269 0.8699
+# zygosity         0.017113 0.017113     1  18.774  0.6494 0.4304
+# as.factor(clade) 0.209510 0.052378     4  19.051  1.9877 0.1372
 
 
-# Interestingly, there was a significant correlation between the variance of evolved low drug fitness (measured at 24 h) and variance of evolved genome size (Pearson's correlation, t14 = 5.65, p-value = 0.00002, cor = 0.80, this remains significant when the four non-variable lines are removed: t14 = 2.31, p-value = 0.037, cor = 0.51).
-
-shapiro.test(fitFlow.ag$t10.G1.1) #W = 0.95807, p-value = 0.5061
-qqnorm(fitFlow.ag$t10.G1.1)
-shapiro.test(fitFlow.sd$all10.ag.1) #W = 0.93818, p-value = 0.2214
-shapiro.test(fitFlow.sd.variable$all10.ag.1) #W = 0.97123, p-value = 0.8581
-shapiro.test(fitFlow.sd.sub$FoG20.10)
-qqnorm(fitFlow.sd.sub$FoG20.10)
+#####FLOW
 
 fit10_flowCV <- cor.test(fitFlow.sd$all10.1, fitFlow.sd$t10.G1.1, method="spearman") #S = 384, p-value = 0.0006306, rho = 0.71
 fit10_flowCV <- cor.test(fitFlow.sd$all10.1.72, fitFlow.sd$t10.G1.1, method="spearman") #S = 554, p-value = 0.007973, rho = 0.0080
@@ -223,7 +260,8 @@ cor.test(fitFlow.sd$t10.G1.1, fitFlow.ag$all0.1.72, method="spearman") #S = 1908
 cor.test(fitFlow.sd$t10.G1.1, fitFlow.sd$delta1.24, method="spearman") #S = 362, p-value = 0.0004083, rho = 0.73
 cor.test(fitFlow.sd$t10.G1.1, fitFlow.sd$delta1.72, method="spearman") #S = 440, p-value = 0.00166, rho = 0.67
 
-cor.test(fitFlow.sd$t10.G1.1, fitFlow.sd$change72.SMG.2, method="spearman") #S = 708, p-value = 0.039, rho = 0.47
+cor.test(fitFlow.sd$t10.G1.1, fitFlow.sd$SMG72.10, method="spearman")
+#S = 538, p-value = 0.006555, rho = 0.60
 
  #################################
  #Fitness in YPD

@@ -118,7 +118,8 @@ ma6.0.rep <- data.frame(summarise(group_by(ma6.24.0, line, rep, enviro), mean(da
 ma7.0.rep <- data.frame(summarise(group_by(ma7.24.0, line, rep, enviro), mean(data), exper="7"))
 ma47.0.rep <- data.frame(summarise(group_by(ma47.24.0, line, rep, enviro), mean(data), exper="47"))
 
-all0 <- rbind(ma4.0.rep, ma4b.0.rep, ma5.0.rep, ma6.0.rep, ma7.0.rep, ma47.0.rep)
+#all0 <- rbind(ma4.0.rep, ma4b.0.rep, ma5.0.rep, ma6.0.rep, ma7.0.rep, ma47.0.rep)
+all0 <- rbind(ma4.0.rep, ma4b.0.rep, ma5.0.rep, ma6.0.rep, ma47.0.rep)
 names(all0)[4] <- "data"
 write.csv(all0, "data_in/MIC/aggregated/OD_all0_24.csv",  row.names=FALSE)
 
@@ -133,7 +134,8 @@ ma6.0.ag <- summarise(group_by(ma6.24.0, line, enviro), mean(data), rep="6")
 ma7.0.ag <- summarise(group_by(ma7.24.0, line, enviro), mean(data), rep="7")
 ma47.0.ag <- summarise(group_by(ma47.24.0, line, enviro), mean(data), rep="47")
 
-all0ag <- data.frame(rbind(ma4.0.ag, ma4b.0.ag, ma5.0.ag, ma6.0.ag, ma7.0.ag, ma47.0.ag))
+#all0ag <- data.frame(rbind(ma4.0.ag, ma4b.0.ag, ma5.0.ag, ma6.0.ag, ma7.0.ag, ma47.0.ag))
+all0ag <- data.frame(rbind(ma4.0.ag, ma4b.0.ag, ma5.0.ag, ma6.0.ag, ma47.0.ag))
 names(all0ag)[3] <- "data"
 all0.ag <- summarise(group_by(all0ag, line, enviro), data = mean(data), sd = sd(data), se= se(data))
 write.csv(all0.ag, "data_in/MIC/aggregated/OD_all0_24_ag.csv",  row.names=FALSE)
@@ -150,7 +152,8 @@ ma6.0.48.rep <- data.frame(summarise(group_by(ma6.48.0, line, rep, enviro), mean
 ma7.0.48.rep <- data.frame(summarise(group_by(ma7.48.0, line, rep, enviro), mean(data), exper="7"))
 ma47.0.48.rep <- data.frame(summarise(group_by(ma47.48.0, line, rep, enviro), mean(data), exper="47"))
 
-all0.48 <- data.frame(rbind(ma4.0.48.rep, ma4b.0.48.rep, ma5.0.48.rep, ma6.0.48.rep, ma7.0.48.rep, ma47.0.48.rep))
+#all0.48 <- data.frame(rbind(ma4.0.48.rep, ma4b.0.48.rep, ma5.0.48.rep, ma6.0.48.rep, ma7.0.48.rep, ma47.0.48.rep))
+all0.48 <- data.frame(rbind(ma4.0.48.rep, ma4b.0.48.rep, ma5.0.48.rep, ma6.0.48.rep,ma47.0.48.rep))
 names(all0.48)[4] <- "data"
 write.csv(all0.48, "data_in/MIC/aggregated/OD_all0_48.csv",  row.names=FALSE)
 
@@ -164,7 +167,8 @@ ma6.0.48.ag <- summarise(group_by(ma6.48.0, line, enviro), mean(data), rep="6")
 ma7.0.48.ag <- summarise(group_by(ma7.48.0, line, enviro), mean(data), rep="7")
 ma47.0.48.ag <- summarise(group_by(ma47.48.0, line, enviro), mean(data), rep="47")
 
-all0.48ag <- data.frame(rbind(ma4.0.48.ag, ma4b.0.48.ag, ma5.0.48.ag, ma6.0.48.ag, ma7.0.48.ag, ma47.0.48.ag))
+#all0.48ag <- data.frame(rbind(ma4.0.48.ag, ma4b.0.48.ag, ma5.0.48.ag, ma6.0.48.ag, ma7.0.48.ag, ma47.0.48.ag))
+all0.48ag <- data.frame(rbind(ma4.0.48.ag, ma4b.0.48.ag, ma5.0.48.ag, ma6.0.48.ag,  ma47.0.48.ag))
 names(all0.48ag)[3] <- "data"
 
 all0.ag.48 <- summarise(group_by(all0.48ag, line, enviro), data = mean(data), sd = sd(data), se = se(data))
@@ -182,7 +186,8 @@ ma6.0.72.rep <- data.frame(summarise(group_by(ma6.72.0, line, rep, enviro), mean
 ma7.0.72.rep <- data.frame(summarise(group_by(ma7.72.0, line, rep, enviro), mean(data), exper="7"))
 ma47.0.72.rep <- data.frame(summarise(group_by(ma47.72.0, line, rep, enviro), mean(data), exper="47"))
 
-all0.72 <- data.frame(rbind(ma4.0.72.rep, ma4b.0.72.rep, ma5.0.72.rep, ma6.0.72.rep, ma7.0.72.rep, ma47.0.72.rep))
+#all0.72 <- data.frame(rbind(ma4.0.72.rep, ma4b.0.72.rep, ma5.0.72.rep, ma6.0.72.rep, ma7.0.72.rep, ma47.0.72.rep))
+all0.72 <- data.frame(rbind(ma4.0.72.rep, ma4b.0.72.rep, ma5.0.72.rep, ma6.0.72.rep,  ma47.0.72.rep))
 names(all0.72)[4] <- "data"
 write.csv(all0.72, "data_in/MIC/aggregated/OD_all0_72.csv",  row.names=FALSE)
 
@@ -196,7 +201,9 @@ ma6.0.72.ag <- summarise(group_by(ma6.72.0, line, enviro), mean(data), rep="6")
 ma7.0.72.ag <- summarise(group_by(ma7.72.0, line, enviro), mean(data), rep="7")
 ma47.0.72.ag <- summarise(group_by(ma47.72.0, line, enviro), mean(data), rep="47")
 
-all0.72ag <- data.frame(rbind(ma4.0.72.ag, ma4b.0.72.ag, ma5.0.72.ag, ma6.0.72.ag, ma7.0.72.ag, ma47.0.72.ag))
+
+#all0.72ag <- data.frame(rbind(ma4.0.72.ag, ma4b.0.72.ag, ma5.0.72.ag, ma6.0.72.ag, ma7.0.72.ag, ma47.0.72.ag))
+all0.72ag <- data.frame(rbind(ma4.0.72.ag, ma4b.0.72.ag, ma5.0.72.ag, ma6.0.72.ag, ma47.0.72.ag))
 names(all0.72ag)[3] <- "data"
 all0.ag.72 <- summarise(group_by(all0.72ag, line, enviro), data = mean(data), sd = sd(data), se = se(data))
 write.csv(all0.ag.72, "data_in/MIC/aggregated/OD_all0_72_ag.csv",  row.names=FALSE)
@@ -219,7 +226,7 @@ ma4.10.rep <- ma4.24 %>%
 names(ma4.10.rep)[2] <-"rep"
 ma4.10.rep <- data.frame(ma4.10.rep)
 
-ma4b.10.rep <- f %>%
+ma4b.10.rep <-ma4b.24 %>%
 	filter(gen=="t10") %>%
 		group_by(line, col, enviro) %>%
 			summarise(dataM = mean(data))
@@ -241,7 +248,8 @@ ma7.10.rep <- ma7.24 %>%
 ma7.10.rep$exper = "7"
 ma7.10.rep <- data.frame(ma7.10.rep)
 
-all10 <- rbind(ma4.10.rep, ma4b.10.rep, ma6.10.rep, ma7.10.rep)
+#all10 <- rbind(ma4.10.rep, ma4b.10.rep, ma6.10.rep, ma7.10.rep)
+all10 <- rbind(ma4.10.rep, ma4b.10.rep, ma6.10.rep)
 write.csv(all10, "data_in/MIC/aggregated/OD_all10_24.csv",  row.names=FALSE)
 all10.rep <- summarise(group_by(all10, line, rep, enviro), data = mean(dataM), sd = sd(dataM), se = se(dataM))
 write.csv(all10.rep, "data_in/MIC/aggregated/OD_all10_24_rep.csv",  row.names=FALSE)
@@ -271,7 +279,8 @@ ma7.10.ag <- ma7.24 %>%
 ma7.10.ag$exper <- "7"
 
 #this is aggregated by experiment among lines
-all10ag <- data.frame(rbind(ma4.10.ag, ma4b.10.ag, ma6.10.ag, ma7.10.ag))
+#all10ag <- data.frame(rbind(ma4.10.ag, ma4b.10.ag, ma6.10.ag, ma7.10.ag))
+all10ag <- data.frame(rbind(ma4.10.ag, ma4b.10.ag, ma6.10.ag))
 #this is aggregated completely
 all10.ag <- summarise(group_by(all10ag, line, enviro), data = mean(dataM), sd = sd(dataM), se = se(dataM))
 write.csv(all10.ag, "data_in/MIC/aggregated/OD_all10_24_ag.csv",  row.names=FALSE)
@@ -307,7 +316,8 @@ ma7.10.rep.48 <- ma7.48 %>%
 ma7.10.rep.48$exper = "7"
 names(ma7.10.rep.48)[2] <- "rep"
 
-all10.48 <- data.frame(rbind(ma4.10.rep.48, ma4b.10.rep.48, ma6.10.rep.48, ma7.10.rep.48))
+#all10.48 <- data.frame(rbind(ma4.10.rep.48, ma4b.10.rep.48, ma6.10.rep.48, ma7.10.rep.48))
+all10.48 <- data.frame(rbind(ma4.10.rep.48, ma4b.10.rep.48, ma6.10.rep.48))
 write.csv(all10.48, "data_in/MIC/aggregated/OD_all10_48.csv",  row.names=FALSE)
 
 all10.rep.48 <- summarise(group_by(all10.48, line, rep, enviro), data = mean(dataM), sd = sd(dataM), se = se(dataM))
@@ -334,7 +344,8 @@ ma7.10.ag.48 <- ma7.48 %>%
 		group_by(line, enviro) %>%
 			summarise(dataM = mean(data), sd = sd(data), se=se(data), exper="7")
 
-all10.48ag <- data.frame(rbind(ma4.10.ag.48, ma4b.10.ag.48, ma6.10.ag.48, ma7.10.ag.48))
+#all10.48ag <- data.frame(rbind(ma4.10.ag.48, ma4b.10.ag.48, ma6.10.ag.48, ma7.10.ag.48))
+all10.48ag <- data.frame(rbind(ma4.10.ag.48, ma4b.10.ag.48, ma6.10.ag.48))
 all10.ag.48 <- summarise(group_by(all10.48ag, line, enviro), data = mean(dataM), sd = sd(dataM), se = se(dataM))
 write.csv(all10.ag.48, "data_in/MIC/aggregated/OD_all10_48_ag.csv",  row.names=FALSE)
 
@@ -363,7 +374,8 @@ ma7.10.rep.72 <- ma7.72 %>%
 		group_by(line, rep, enviro) %>%
 			summarise(dataM = mean(data), exper="7")
 
-all10.72 <- data.frame(rbind(ma4.10.rep.72, ma4b.10.rep.72, ma6.10.rep.72, ma7.10.rep.72))
+#all10.72 <- data.frame(rbind(ma4.10.rep.72, ma4b.10.rep.72, ma6.10.rep.72, ma7.10.rep.72))
+all10.72 <- data.frame(rbind(ma4.10.rep.72, ma4b.10.rep.72, ma6.10.rep.72))
 write.csv(all10.72, "data_in/MIC/aggregated/OD_all10_72.csv",  row.names=FALSE)
 
 all10.rep.72 <- summarise(group_by(all10.72, line, rep, enviro), data = mean(dataM), sd = sd(dataM), se = se(dataM))
@@ -386,6 +398,7 @@ ma7.10.ag.72 <- ma7.72 %>%
 		group_by(line, enviro) %>%
 			summarise(dataM = mean(data), sd = sd(data), se=se(data), exper="7")
 
-all10.72ag <- data.frame(rbind(ma4.10.ag.72, ma4b.10.ag.72, ma6.10.ag.72, ma7.10.ag.72))
+#all10.72ag <- data.frame(rbind(ma4.10.ag.72, ma4b.10.ag.72, ma6.10.ag.72, ma7.10.ag.72))
+all10.72ag <- data.frame(rbind(ma4.10.ag.72, ma4b.10.ag.72, ma6.10.ag.72))
 all10.ag.72 <- summarise(group_by(all10.72ag, line, enviro), data = mean(dataM), sd = sd(dataM), se = se(dataM))
 write.csv(all10.ag.72, "data_in/MIC/aggregated/OD_all10_72_ag.csv",  row.names=FALSE)

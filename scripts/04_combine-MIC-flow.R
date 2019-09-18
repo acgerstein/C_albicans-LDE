@@ -242,6 +242,8 @@ fitFlow$rep <- as.character(fitFlow$rep)
 fitFlow$enviro <- as.character(fitFlow$enviro)
 fitFlow$place <- as.character(fitFlow$place)
 
+fitFlow$place72_MIC <- c(rep(16, 12), rep(12, 12), rep(3, 12), rep(10, 12), rep(17, 12), rep(13, 12), rep(14, 12), rep(11, 12), rep(4, 12), rep(15, 12), rep(2, 12), rep(20, 12), rep(6, 12), rep(5, 12), rep(7, 12), rep(9, 12), rep(1, 12), rep(18, 12), rep(8, 12), rep(19, 12))
+
 nums <- unlist(lapply(fitFlow, is.numeric))
 
 #aggregates
