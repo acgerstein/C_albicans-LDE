@@ -405,10 +405,32 @@ system("open manuscript/figures/Figure4ab-genomeSize.pdf")
 #(non)correlations with genome size
 #################################
 
+pdf("manuscript/figures/FigureS5-evolPloidy.pdf", width=7, height=6)
+par(mfrow=c(5, 4))
+j <- 0
+for(i in order72_MIC){
+  j <- j+1
+  sub <- subset(fitFlow, strain == i)
+  t0range <- range(sub$t0.G1.1, na.rm=TRUE)
+  plot(sub$rep, sub$t10.G1.1, ylim= c(125, 475), yaxt="n", xaxt="n", pch=19)
+  points(sub$rep, sub$t10.G1.2)
+  abline(h=t0range[1], col="grey")
+  abline(h=t0range[2], col="grey")
+  if(j > 16) axis(1, 1:12, cex.axis=0.8)
+  else axis(1, 1:12, labels=FALSE)
+  if(j %% 4 == 1) axis(2, las=2, cex.axis=0.8, at=c(150, 250, 350, 450))
+  else axis(2, labels=FALSE, at=c(150, 250, 350, 450))
+  mtext(paste0("A", i), side=3, adj=0.01)
+}
+mtext("Replicate", side=1, outer=TRUE, line=2)
+mtext("Genome size (FITC intensity)", side=2, outer=TRUE, line=2)
+system("open manuscript/figures/FigureS5-evolPloidy.pdf")
+
+
 #################################
-#Figure S5
+#Figure S6
 #################################
-pdf("manuscript/figures/FigureS5-deltaFit72-evolPloidy.pdf", width=7, height=6)
+pdf("manuscript/figures/FigureS6-deltaFit72-evolPloidy.pdf", width=7, height=6)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
 for(i in c(order72_MIC[1:20])){
@@ -428,12 +450,12 @@ for(i in c(order72_MIC[1:20])){
 mtext("Change in fitness (OD at 72 h)", side=1, outer=TRUE, line=2)
 mtext("Evolved genome size (FITC intensity)", side=2, outer=TRUE, line=2)
 dev.off()
-system("open manuscript/figures/FigureS5-deltaFit72-evolPloidy.pdf")
+system("open manuscript/figures/FigureS6-deltaFit72-evolPloidy.pdf")
 
 #################################
-#Figure S6
+#Figure S7
 #################################
-pdf("manuscript/figures/FigureS6-deltaSMG-evolPloidy.pdf", width=7, height=6)
+pdf("manuscript/figures/FigureS7-deltaSMG-evolPloidy.pdf", width=7, height=6)
 k<-0
 par(mar=c(1, 1, 1, 1), mfrow=c(5, 4), mar=c(1, 1, 1, 1), oma=c(4, 4, 1, 1))
 for(i in c(order72_MIC[1:20])){
@@ -453,146 +475,5 @@ for(i in c(order72_MIC[1:20])){
 mtext("Change in tolerance (SMG at 72 h)", side=1, outer=TRUE, line=2)
 mtext("Evolved genome size (FITC intensity)", side=2, outer=TRUE, line=2)
 dev.off()
-system("open manuscript/figures/FigureS6-deltaSMG-evolPloidy.pdf")
+system("open manuscript/figures/FigureS7-deltaSMG-evolPloidy.pdf")
 
-# pdf("manuscript/figures/FigureSx-ancOD1cor-Ploidy_mean_SD.pdf", width=7, height=6)
-# par(mfrow=c(2, 2),mar=c(1,1 , 1, 1), oma=c(3, 4, 1, 1))
-# plot(fitFlow.ag$all0.1, fitFlow.ag$t10.G1.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), cex=1.5, ylim=c(140, 260))
-# axis(1, labels=FALSE)
-# axis(2, las=2)
-# mtext("Assessed at 24h", side=3, adj=0.01)
-# abline(lm(fitFlow.ag$t10.G1.1~fitFlow.ag$all0.1))
-# #cor.test(fitFlow.ag$t10.G1.1, fitFlow.ag$all0.1)
-# text(-0.1, 145, "cor = -0.45", pos=4, cex=1.25)
-# txt <- "Mean evolved genome size"
-# mtext(txt, side=2, outer=FALSE, line=2.5)
-# #cor.test(fitFlow.ag$t10.G1.1, fitFlow.ag$all0.1)
-# #t = -2.1448, df = 18, p-value = 0.04587
-#
-# par(mar=c(1,1 , 1, 1))
-# plot(fitFlow.ag$all0.1.72, fitFlow.ag$t10.G1.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), cex=1.5, ylim=c(140, 260))
-# axis(1, labels=FALSE)
-# axis(2, labels=FALSE)
-# mtext("Assessed at 72h", side=3, adj=0.01)
-# abline(lm(fitFlow.ag$t10.G1.1~fitFlow.ag$all0.1.72), lty = 2)
-# #cor.test(fitFlow.ag$t10.G1.1, fitFlow.ag$all0.1.72)
-# #t = -0.6966, df = 18, p-value = 0.495
-#
-# par(mar=c(1,1 , 1, 1))
-# plot(fitFlow.ag$all0.1, fitFlow.sd$t10.G1.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(0, 90), cex=1.5)
-# axis(1, labels=FALSE)
-# axis(2, las=2)
-# abline(lm(fitFlow.sd$t10.G1.1~fitFlow.ag$all0.1))
-# #cor.test(fitFlow.sd$t10.G1.1, fitFlow.ag$all0.1)
-# #t = -3.2213, df = 18, p-value = 0.004735
-# axis(1)
-# txt <- "Evolved variation in genome size (sd)"
-# mtext(txt, side=2, outer=FALSE, line=2.5)
-# text(-0.1, 5, "cor = -0.60", pos=4, cex=1.25)
-#
-# plot(fitFlow.ag$all0.1.72, fitFlow.sd$t10.G1.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2), ylim=c(0, 90), cex=1.5)
-# axis(1, labels=TRUE)
-# axis(2, las=2, labels=FALSE)
-# abline(lm(fitFlow.sd$t10.G1.1~fitFlow.ag$all0.1.72), lty=2)
-# #cor.test(fitFlow.sd$t10.G1.1, fitFlow.ag$all0.1.72)
-# mtext("Initial growth ability", side=1, outer=TRUE, line=1.5)
-# dev.off()
-# system("open manuscript/figures/FigureSx-ancOD1cor-Ploidy_mean_SD.pdf")
-#
-# pdf("manuscript/figures/FigureSx-SD-OD1_cor_SD-G1_SD-SMG72.pdf", width=7, height=6)
-# par(mfrow=c(2, 2),mar=c(1,1 , 1, 1), oma=c(4, 4, 1, 1))
-# par(mar=c(1,1 , 1, 1))
-# plot(fitFlow.sd$all10.1, fitFlow.sd$t10.G1.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 0.5), ylim=c(0, 90), cex=1.5)
-# axis(1, labels=FALSE)
-# axis(2, las=2)
-# abline(lm(fitFlow.sd$t10.G1.1~fitFlow.sd$all10.1))
-# #cor.test(fitFlow.sd$t10.G1.1, fitFlow.sd$all10.1)
-# #t = 5.6545, df = 18, p-value = 0.00002304
-# #txt <- "Evolved variation in genome size (sd)"
-# mtext(expression("Evolved variation\nin genome size (sd)"), side=2, outer=FALSE, line=2.5)
-# text(0.3, 5, "cor = 0.80", pos=4, cex=1.25)
-# mtext("Assessed at 24h", side=3, adj=0.01)
-#
-# plot(fitFlow.sd$all10.1.72, fitFlow.sd$t10.G1.1, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 0.5), ylim=c(0, 90))
-# axis(1, labels=FALSE)
-# axis(2, las=2, labels=FALSE)
-# #cor.test(fitFlow.sd$t10.G1.1, fitFlow.sd$all10.1.72)
-# abline(lm(fitFlow.sd$t10.G1.1~fitFlow.sd$all0.1.72), lty=2)
-# mtext("Assessed at 72h", side=3, adj=0.01)
-#
-# plot(fitFlow.sd$all10.1, fitFlow.sd$SMG72.10, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 0.5), ylim=c(0, 0.5), cex=1.5)
-# axis(1, labels=FALSE)
-# axis(2, las=2)
-# abline(lm(fitFlow.sd$SMG72.10~fitFlow.sd$all10.1))
-# #cor.test(fitFlow.sd$SMG72.10, fitFlow.sd$all10.1)
-# #t = 3.167, df = 18, p-value = 0.005336
-# axis(2, las=2)
-# axis(1)
-# #txt <- "Evolved variation\nin tolerance (SMG72)"
-# mtext(expression("Evolved variation\nin tolerance (SMG72)"), side=2, outer=FALSE, line=2.5)
-# text(0.3, 0.05, "cor = 0.60", pos=4, cex=1.25)
-#
-# plot(fitFlow.sd$all10.1.72, fitFlow.sd$SMG72.10, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 0.5), ylim=c(0, 0.5), cex=1.5)
-# axis(1, labels=TRUE)
-# axis(2, las=2, labels=FALSE)
-# #cor.test(fitFlow.sd$SMG72.10, fitFlow.sd$all10.1.72)
-# #t = 1.6282, df = 18, p-value = 0.1209
-# #abline(lm(fitFlow.sd$SMG72.10~fitFlow.sd$all0.1.72), lty=2)
-# mtext("Evolved variance in growth (FLC1)", side=1, outer=TRUE, line=2.5)
-# dev.off()
-#
-# pdf("manuscript/figures/FigureSx-ancOD1_cor_SMG-mean-SD.pdf", width=7, height=6)
-# par(mfrow=c(2, 2),mar=c(1,1 , 1, 1), oma=c(3, 4, 1, 1))
-# plot(fitFlow.ag$all0.1, fitFlow.ag$change72.SMG.2, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), cex=1.5, ylim=c(-0.3, 0.6))
-# axis(1, labels=FALSE)
-# axis(2, las=2)
-# mtext("Assessed at 24h", side=3, adj=0.01)
-# abline(lm(fitFlow.ag$change72.SMG.2~fitFlow.ag$all0.1), lty=2)
-# #text(-0.1, 145, "cor = -0.45", pos=4, cex=1.25)
-# txt <- expression(paste(Delta," tolerance (SMG72)"))
-# mtext(txt, side=2, outer=FALSE, line=2.5)
-# #cor.test(fitFlow.ag$change72.SMG.2, fitFlow.ag$all0.1)
-# #t = -0.38601, df = 18, p-value = 0.704
-#
-# par(mar=c(1,1 , 1, 1))
-# plot(fitFlow.ag$all0.1.72, fitFlow.ag$change72.SMG.2, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col72, ann=F, xlim=c(0, 2), cex=1.5, ylim=c(-0.3, 0.6))
-# axis(1, labels=FALSE)
-# axis(2, labels=FALSE)
-# mtext("Assessed at 72h", side=3, adj=0.01)
-# abline(lm(fitFlow.ag$change72.SMG.2~fitFlow.ag$all0.1.72), lty = 2)
-# #cor.test(fitFlow.ag$t10.G1.1, fitFlow.ag$all0.1.72)
-# #t = -0.6966, df = 18, p-value = 0.495
-#
-# par(mar=c(1,1 , 1, 1))
-# plot(fitFlow.ag$all0.1, fitFlow.sd$SMG72.10, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2),  ylim=c(0, 0.6), cex=1.5)
-# axis(1, labels=FALSE)
-# axis(2, las=2)
-# abline(lm(fitFlow.sd$SMG72.10~fitFlow.ag$all0.1))
-# #cor.test(fitFlow.sd$SMG72.10, fitFlow.ag$all0.1)
-# #t = -2.9812, df = 18, p-value = 0.008006
-# axis(2, las=2)
-# axis(1)
-# txt <- "Evolved variation in tolerance (SMG72)"
-# mtext(txt, side=2, outer=FALSE, line=2.5)
-# text(-0.1, 0.05, "cor = -0.57", pos=4, cex=1.25)
-#
-# par(mar=c(1,1 , 1, 1))
-# plot(fitFlow.ag$all0.1.72, fitFlow.sd$SMG72.10, xaxt="n", yaxt="n", pch=19, col=fitFlow.ag$col, ann=F, xlim=c(0, 2),  ylim=c(0, 0.6), cex=1.5)
-# axis(1, labels=TRUE)
-# axis(2, labels=FALSE)
-# abline(lm(fitFlow.sd$SMG72.10~fitFlow.ag$all0.1.72), lty=2)
-# #cor.test(fitFlow.sd$SMG72.10, fitFlow.ag$all0.1.72)
-# #t = -1.8053, df = 18, p-value = 0.08779
-# mtext("Initial growth ability", side=1, outer=TRUE, line=1.5)
-# dev.off()
-# system("open manuscript/figures/FigureSx-ancOD1_cor_SMG-mean-SD.pdf")
-
-
-
-
-# so if MIC at no drug drops then can tehnically see an increase in MIC with similar OD at higher levels of drug compared to the ancestor
-# Really hard to read MIC from ETest when there is a lot of background growth - A3! A5!
-# If want to continue this, it's not about the few errant strains that increased i MIC. Look at the strains that increased tolerance -> A3
-# Worth doing a disk assay to see when that change happened in A3 (A5 always seems high?)
-# If at varying points then could sequence those strains?
-# GC75 - thankfully (!) also in Quinns experiment ("A12")

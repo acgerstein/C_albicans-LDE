@@ -1,4 +1,3 @@
-library(viridis)
 #################################
 #Load libraries and functions
 #################################
@@ -10,6 +9,7 @@ library(lmerTest)
 library(ggbeeswarm)
 library(beeswarm)
 library(RColorBrewer)
+library(viridis)
 library(nlme)
 library(MASS)
 library(dplyr)

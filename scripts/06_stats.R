@@ -3,6 +3,20 @@
 #################################
 source("scripts/04_combine-MIC-flow.R")
 library(lmerTest)
+
+#################################
+#Ancestral correlations
+#################################
+cor.test(fitFlow.ag$all0.1, fitFlow.ag$all0.1.72, method ="spearman")
+#?c
+cor.test(fitFlow.ag$all0.1, fitFlow.ag$MIC24, method ="spearman")
+#S = 170.7, p-value = 5.582e-07, rho = 0.87
+cor.test(fitFlow.ag$all0.1.72, fitFlow.ag$SMG72, method ="spearman")
+#S = 626, p-value = 0.01782, rho = 0.53
+cor.test(fitFlow.ag$MIC24, fitFlow.ag$SMG72, method ="spearman")
+#S = 1141.8, p-value = 0.5518, rho = 0.14
+
+
 #################################
 #Fitness in FLC1
 #################################
