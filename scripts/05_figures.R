@@ -24,7 +24,7 @@ axis(1, seq(1, 20, 2), paste0("A", all0.ag.1$line[place72][seq(1, 20, 2)]), cex.
 axis(1, seq(2, 20, 2), paste0("A", all0.ag.1$line[place72][seq(2, 20, 2)]), cex.axis=0.8)
 axis(2, las=2)
 mtext("strain", side=1, line=2)
-mtext(expression("Growth in YPD + 1 " ~ mu~ "M FLC (optical density)"), side=2, line=1.5, outer=TRUE)
+mtext(expression("Growth in YPD + 1"~mu~"g/mL FLC (optical density)"), side=2, line=1.5, outer=TRUE)
 mtext("Fitness at 72h", side=3, adj=0.01)
 
 xl <- 1
