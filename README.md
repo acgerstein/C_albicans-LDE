@@ -1,2 +1,3 @@
 # C_albicans-LDE
-Git repo for the manuscript "Genetic background influences heterogeneity of adaptive response and genome stability during prolonged antifungal drug exposure in Candida albicans"
+Git repo for the mSphere manuscript "Candida albicans Genetic Background Influences Mean and Heterogeneity of Drug Responses and Genome Stability during Evolution to Fluconazole
+"

@@ -8,7 +8,7 @@ source("scripts/04_combine-MIC-flow.R")
 #Fitness in FLC1
 #################################
 #Figure 1
-pdf("manuscript/figures/Figure1-OD1.pdf", width=7, height=5.5)
+pdf("manuscript/figures/Figure1-OD1.pdf", width=7, height=5.5, font = "Times")
 par(mfrow=c(2, 1),mar=c(1,1 , 1, 1), oma=c(3, 3, 1, 1))
 beeswarm(all10.1~place72, data = all10.1, corral = "wrap", col=coloursVa, ylim=c(0, 2), xaxt="n", yaxt="n", ann=F, cex=0.7, pch=19)
 points(1:20, all0.ag.1$data[place72], pch="-", cex=2.25, col=grey(0.3))
@@ -44,8 +44,8 @@ rect(
   col=coloursV, border=NA
 )
 
-mtext(expression("low anc.\n fitness"),side=1,cex=0.6, adj=-1, line=0.25)
-mtext(expression("high anc.\n fitness"),side=3,cex=0.6, adj=-10, line=-0.25)
+mtext(expression("low parental\n fitness"),side=1,cex=0.6, adj=-1, line=0.25)
+mtext(expression("high parental\n fitness"),side=3,cex=0.6, adj=-10, line=-0.25)
 
 dev.off()
 system("open manuscript/figures/Figure1-OD1.pdf")
